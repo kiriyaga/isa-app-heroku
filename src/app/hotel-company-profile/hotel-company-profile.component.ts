@@ -15,6 +15,7 @@ export class HotelCompanyProfileComponent implements OnInit {
 
   id: number;
   company: CompanyModule;
+  fastSeats:any;
 
   constructor(private route: ActivatedRoute, private router: Router, private hotelService: HotelCompanyService, private datePipe: DatePipe) {
 

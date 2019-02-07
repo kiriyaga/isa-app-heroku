@@ -20,6 +20,10 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
   roomId: any;
   data: Object;
   frRoomId : number;
+  
+  addRoomFastReservation(){
+	  
+  }
 
   // fast-reserve boolean
   frTransportFromAirportBool: boolean;

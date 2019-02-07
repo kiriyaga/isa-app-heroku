@@ -128,7 +128,7 @@ export class RoomSearchComponent implements OnInit {
 
   }
 
-  private getAllRooms() {
+  public getAllRooms() {
 
     this.resetSearchFields();
 

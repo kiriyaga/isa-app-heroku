@@ -387,7 +387,7 @@ export class AvioCompanyAdminPanelComponent implements OnInit {
     )
   }
 
-  public EditDestination(index: number) {
+  public EditDestination() {
     var location: LocationModule;
     location = this.editDestForm.value;
     location.id = this.idDest;

@@ -46,7 +46,7 @@ export class HotelsComponent implements OnInit {
     this.router.navigate(['/hotels/search/'+ hotelName +'/' + hotelLocation+ '/' + checkInDate + '/' + checkOutDate]);
   }
 
-  private getAllHotels() {
+  public getAllHotels() {
 
     this.resetSearchFields();
 
@@ -60,7 +60,7 @@ export class HotelsComponent implements OnInit {
     )
   }
 
-  private resetSearchFields() {
+  public resetSearchFields() {
 
     this.searchForm.get("hotelName").reset();
     this.searchForm.get("hotelLocation").reset();
