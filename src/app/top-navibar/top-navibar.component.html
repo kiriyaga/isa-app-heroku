@@ -1,0 +1,96 @@
+<!-- navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top" style="text-transform: uppercase">
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <a class="navbar-brand" style="color: white; margin-left: 30px;" routerLink="/home">
+            <img src="/assets/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        </a>
+        <ul class="navbar-nav mr-auto">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="navbar-nav" style="vertical-align: bottom">
+                    <a class="nav-item nav-link active" id="nav-link" style="color: white" routerLink="/avio">
+                        <i class="material-icons">airplanemode_active</i>
+                        Flights
+                    </a>
+                    <a class="nav-item nav-link" id="nav-link" style="color: white" routerLink="/hotels">
+                        <i class="material-icons">hotel</i>
+                        Hotels
+                    </a>
+                    <a class="nav-item nav-link" id="nav-link" style="color: white" routerLink="/cars">
+                        <i class="material-icons">directions_car</i>
+                        Cars
+                    </a>
+                </div>
+            </div>
+        </ul>
+
+        <ul class="navbar-nav mr-right" style="margin-right: 20px">
+            <li [hidden]="isLogin" class="nav-item">
+                <a class="nav-link" style="color: white" routerLink="/signin">
+                    <!--<i class="material-icons">supervised_user_circle</i>-->
+                    Sign In
+                </a>
+            </li>
+            <li class="nav-item" (click)="ShowCart()" data-toggle="modal" data-target="#exampleModal10" 
+                style="color:white" >
+
+                <a class="nav-link" style="color: white">
+                    <i class="material-icons">
+                        card_travel
+                    </i>
+                </a>
+            </li>
+            <li [hidden]="!isLogin" class="nav-item dropdown">
+                <a class="nav-link" style="color: white" dropdown-toggle data-toggle="dropdown" href="" role="button"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">person</i>
+                    {{username}}
+                </a>
+                <div class="dropdown-menu bg-dark dropdown-menu-right">
+                    <a [hidden]="user==null" class="dropdown-item" style="color: white;" routerLink="/profile">Profile</a>
+                    <a [hidden]="user.authority!='USER'" class="dropdown-item" style="color: white;" routerLink="/friends">Friends</a>
+                    <a [hidden]="user.authority!='AVIOADMIN'" class="dropdown-item" style="color: white;" routerLink="/avio/adminpanel">Adminpanel</a>
+                    <a [hidden]="user.authority!='HOTELADMIN'" class="dropdown-item" style="color: white;" routerLink="/hotels/adminpanel">Adminpanel</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" style="color: white;" routerLink="" (click)="Logout()">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="modal fade" id="exampleModal10" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel3">Trip Card</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-content">
+                    <div class="row" >
+                        <div class="col-2">
+                            <h5>Flight:</h5>
+                        </div>
+                        <div *ngIf="avioOrder!=null" class="col-2">
+                            {{avioOrder.flight.startDestination.location.adress}} - {{avioOrder.flight.endDestination.location.adress}}
+                        </div>
+                        <div *ngIf="avioOrder!=null" class="col-2">
+                            <a><i class="material-icons" (click)="DeleteFlight()" style="color: red">cancel</i></a>
+                        </div>
+                        <div *ngIf="avioOrder==null" class="col-2">
+                            None
+                        </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="Reservation()">Reservation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

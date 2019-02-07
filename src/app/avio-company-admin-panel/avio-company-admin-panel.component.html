@@ -1,0 +1,912 @@
+<!-- Tabs -->
+<section id="tabs">
+  <div class="container">
+    <h6 class="section-title h3">{{company.name}} AdminPanel</h6>
+    <div class="row">
+      <div class="col-md-5 ">
+        <nav>
+          <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+              aria-controls="nav-home" aria-selected="true">Basic Informations</a>
+            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+              aria-controls="nav-profile" aria-selected="false">Flights</a>
+            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+              aria-controls="nav-contact" aria-selected="false">Graphs</a>
+            <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab"
+              aria-controls="nav-about" aria-selected="false">Location</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+      <!--
+            BASIC INFORMATIONS
+          -->
+      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <p>Rate: {{rate}}/10</p>
+        <div class="col-md-8">
+          <div class="tab-content">
+            <form class="form" [formGroup]="basicForm" id="basicForm">
+              <div class="form-group row">
+                <label for="ID" class="col-sm-4 col-form-label">ID</label>
+                <div class="col-sm-8">
+                  <input type="text" readonly class="form-control-plaintext" id="ID" formControlName="id">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="name" class="col-sm-4 col-form-label">Name</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="name" placeholder="Name" formControlName="name" [ngClass]="{'is-invalid':basicForm.get('name').touched && basicForm.get('name').invalid}"
+                    required>
+                  <div *ngIf="basicForm.get('name').touched && basicForm.get('name').invalid" class="invalid-feedback">
+                    <div>Name is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="promotiveDescription" class="col-sm-4 col-form-label">Promotive Description</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="promotiveDescription" placeholder="Promotive Description"
+                    formControlName="promotiveDescription" [ngClass]="{'is-invalid':basicForm.get('promotiveDescription').touched && basicForm.get('promotiveDescription').invalid}"
+                    required>
+                  <div *ngIf="basicForm.get('promotiveDescription').touched && basicForm.get('promotiveDescription').invalid"
+                    class="invalid-feedback">
+                    <div>Promotive description is required</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <button type="button" class="btn btn-primary" [disabled]="!basicForm.valid" (click)="EditBasic()">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <br>
+        <hr>
+        <!--TABELA ZA DESTINACIJE -->
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Destinations</th>
+              <th scope="col">Location</th>
+              <th scope="col">Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor=" let item of company.destinations;let i = index">
+              <td>{{i}}</td>
+              <td>
+                <div class="card" style="width: 35rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{item.adress}},{{item.code}}</h5>
+                    <agm-map [latitude]="item.lat" [longitude]="item.lng">
+                      <agm-marker [latitude]="item.lat" [longitude]="item.lng"></agm-marker>
+                    </agm-map>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <button type="button" class="btn btn-outline-danger" (click)="DeleteDestination(item,i)">Delete</button>
+                <button type="button" class="btn btn-outline-warning" data-toggle="modal" (click)="EditDestinationModal(item,i)"
+                  data-target="#exampleModal1">Edit</button>
+            </tr>
+          </tbody>
+        </table>
+
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Add</button>
+        <br>
+        <br>
+        <br>
+
+
+
+      </div>
+      <!--
+           FLIGHTS
+          -->
+      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <!--TABELA ZA LETOVE -->
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Flights</th>
+              <th scope="col">Locations</th>
+              <th scope="col">Informations</th>
+              <th scope="col">Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor=" let item of company.flights;let i = index">
+              <td>
+                {{i}}
+
+              </td>
+              <td>
+                <div class="card" style="width: 35rem;">
+                  <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <agm-map [zoom]="0"  [latitude]="company.location.lat" [longitude]="company.lng" >
+                      <agm-marker *ngFor=" let item1 of item.flightStop" [latitude]="item1.location.lat" [longitude]="item1.location.lng"></agm-marker>
+                      <agm-marker [latitude]="item.startDestination.location.lat" [longitude]="item.startDestination.location.lng"></agm-marker>
+                      <agm-marker [latitude]="item.endDestination.location.lat" [longitude]="item.endDestination.location.lng"></agm-marker>
+                    </agm-map>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <h5>Locations:</h5>
+                <hr>
+              
+                    <div class="col-sm-13">
+                        <table class="table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th scope="col">Flight stops</th>
+                                <th scope="col">Location</th>
+                                <th scope="col">Operations</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor=" let item1 of item.flightStop;let j = index">
+                                <td>{{i}}</td>
+                                <td>
+                                  {{item1.location.adress}}
+                                </td>
+                                <td>
+                                  <button type="button" class="btn btn-outline-danger" (click)="DeleteFlightStop(item1,item)">Delete</button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <br>
+                          <button type="button" class="btn btn-outline-success" data-toggle="modal" (click)="AddFlightStopModal(item,i)" data-target="#exampleModal4">Add</button>
+                    </div>
+                <p>Ocena: {{item.rate}}/10</p>
+              </td>
+              <td>
+                <button type="button" class="btn btn-outline-danger" (click)="DeleteFlight(item,i)">Delete</button>
+                <button type="button" class="btn btn-outline-warning" data-toggle="modal" (click)="EditFlightModal(item,i)"
+                  data-target="#exampleModal5">Edit</button>
+                  <button type="button" class="btn btn-outline-success" routerLink="/avio/adminpanel/seats/{{item.id}}" >Configure Seats</button>
+                  </td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-success" data-toggle="modal" (click)="AddModal()" data-target="#exampleModal2">Add</button>
+        <br>
+        <br>
+        <br>
+      </div>
+      <!--
+            GRAPHS
+          -->
+      <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+          <fusioncharts
+          width="500" 
+          height="300"
+          type="column2d"
+          dataFormat="json"
+          [dataSource]="data" >
+        </fusioncharts>
+        <br>
+        <br>
+        <form class="form" [formGroup]="earningsForm" id="earningsForm">
+            <div class="form-group row">
+              <div class="col-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker222" class="form-control" id="earnings1" formControlName="earnings1"
+                    placeholder="Lower range" [ngClass]="{'is-invalid':earningsForm.get('earnings1').touched && earningsForm.get('earnings1').invalid}"
+                    required>
+                  <div *ngIf="earningsForm.get('earnings1').touched && earningsForm.get('earnings1').invalid" class="invalid-feedback">
+                    <div>Lower range is required</div>
+                  </div>
+                  <mat-datepicker-toggle matSuffix [for]="picker222"></mat-datepicker-toggle>
+                  <mat-datepicker #picker222></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-3">
+                  <mat-form-field>
+                    <input matInput [matDatepicker]="picker88" class="form-control" id="earnings2" formControlName="earnings2"
+                      placeholder="Upper range" [ngClass]="{'is-invalid':earningsForm.get('earnings2').touched && earningsForm.get('earnings2').invalid}"
+                      required>
+                    <div *ngIf="earningsForm.get('earnings2').touched && earningsForm.get('earnings2').invalid" class="invalid-feedback">
+                      <div>Upper range is required</div>
+                    </div>
+                    <mat-datepicker-toggle matSuffix [for]="picker88"></mat-datepicker-toggle>
+                    <mat-datepicker #picker88></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-3">
+                  <div style="margin-top: 20px"> 
+                    Income: {{earnings}}$
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" [disabled]="!earningsForm.valid" (click)="GetEarning()">Get
+                    earning</button>
+            </div>
+            </form>
+
+      </div>
+      <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+
+          <!--TABELA ZA DESTINACIJE -->
+          <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="card" style="width: 35rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">{{company.location.adress}},{{company.location.code}}</h5>
+                        <agm-map [latitude]="company.location.lat" [longitude]="company.location.lng">
+                          <agm-marker [latitude]="company.location.lat" [longitude]="company.location.lng"></agm-marker>
+                        </agm-map>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+    
+            <button type="button" class="btn btn-success" data-toggle="modal" (click)="EditLocationModal()" data-target="#exampleModal90">Edit</button>
+            <br>
+            <br>
+            <br>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!--MODALS FOR DESTINATIONS *ADD*-->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add destination</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="addDestForm" id="addDestForm">
+            <div class="form-group row">
+              <label for="code" class="col-sm-4 col-form-label">Code</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="code" placeholder="Code" formControlName="code" [ngClass]="{'is-invalid':addDestForm.get('code').touched && addDestForm.get('code').invalid}"
+                  required>
+                <div *ngIf="addDestForm.get('code').touched && addDestForm.get('code').invalid" class="invalid-feedback">
+                  <div>Code is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="adress" class="col-sm-4 col-form-label">Adress</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="name" placeholder="Adress" formControlName="adress"
+                  [ngClass]="{'is-invalid':addDestForm.get('adress').touched && addDestForm.get('adress').invalid}"
+                  required>
+                <div *ngIf="addDestForm.get('adress').touched && addDestForm.get('adress').invalid" class="invalid-feedback">
+                  <div>Adress is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Latitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lat" placeholder="lat" formControlName="lat" [ngClass]="{'is-invalid':addDestForm.get('lat').touched && addDestForm.get('lat').invalid}"
+                  required>
+                <div *ngIf="addDestForm.get('lat').touched && addDestForm.get('lat').invalid" class="invalid-feedback">
+                  <div>Latitude is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Longitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lng" placeholder="lng" formControlName="lng" [ngClass]="{'is-invalid':addDestForm.get('lng').touched && addDestForm.get('lng').invalid}"
+                  required>
+                <div *ngIf="addDestForm.get('lng').touched && addDestForm.get('lng').invalid" class="invalid-feedback">
+                  <div>Longitude is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!addDestForm.valid" (click)="AddDestination()">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--MODALS FOR DESTINATIONS *EDIT*-->
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">Edit destination</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="editDestForm" id="editDestForm">
+            <div class="form-group row">
+              <label for="code" class="col-sm-4 col-form-label">Code</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="code" placeholder="Code" formControlName="code" [ngClass]="{'is-invalid':editDestForm.get('code').touched && editDestForm.get('code').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('code').touched && editDestForm.get('code').invalid" class="invalid-feedback">
+                  <div>Code is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="adress" class="col-sm-4 col-form-label">Adress</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="name" placeholder="Adress" formControlName="adress"
+                  [ngClass]="{'is-invalid':editDestForm.get('adress').touched && editDestForm.get('adress').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('adress').touched && editDestForm.get('adress').invalid" class="invalid-feedback">
+                  <div>Adress is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Latitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lat" placeholder="lat" formControlName="lat" [ngClass]="{'is-invalid':editDestForm.get('lat').touched && editDestForm.get('lat').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('lat').touched && editDestForm.get('lat').invalid" class="invalid-feedback">
+                  <div>Latitude is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Longitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lng" placeholder="lng" formControlName="lng" [ngClass]="{'is-invalid':editDestForm.get('lng').touched && editDestForm.get('lng').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('lng').touched && editDestForm.get('lng').invalid" class="invalid-feedback">
+                  <div>Longitude is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!editDestForm.valid" (click)="EditDestination()">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODALS FOR FLIGHTS *ADD*-->
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel3">Add flight</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content">
+            <form class="form" [formGroup]="addFlightForm" id="addFlightForm">
+              <div class="form-group row">
+                  <label for="price" class="col-sm-5 col-form-label">Price for ticket</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" id="price" placeholder="Price for ticket" formControlName="price"
+                      [ngClass]="{'is-invalid':addFlightForm.get('price').touched && addFlightForm.get('price').invalid}"
+                      required>
+                    <div *ngIf="addFlightForm.get('price').touched && addFlightForm.get('price').invalid" class="invalid-feedback">
+                      <div>Price is required</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                    $
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="additionalPriceCheckBag" class="col-sm-5 col-form-label">Price for Check-bag</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" id="additionalPriceCheckBag" placeholder="Price for Check-bag" formControlName="additionalPriceCheckBag"
+                      [ngClass]="{'is-invalid':addFlightForm.get('additionalPriceCheckBag').touched && addFlightForm.get('additionalPriceCheckBag').invalid}"
+                      required>
+                    <div *ngIf="addFlightForm.get('additionalPriceCheckBag').touched && addFlightForm.get('additionalPriceCheckBag').invalid" class="invalid-feedback">
+                      <div>Price for Check-bag</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                      $
+                    </div>
+                </div>
+                <div class="form-group row">
+                  <label for="maxCheckBag" class="col-sm-5 col-form-label">Check-bag number</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="additionalPriceCheckBag" placeholder="Check-bag number" formControlName="maxCheckBag"
+                      [ngClass]="{'is-invalid':addFlightForm.get('maxCheckBag').touched && addFlightForm.get('maxCheckBag').invalid}"
+                      required>
+                    <div *ngIf="addFlightForm.get('maxCheckBag').touched && addFlightForm.get('maxCheckBag').invalid" class="invalid-feedback">
+                      <div>Check-bag max number</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="additionalPriceCaryyBag" class="col-sm-5 col-form-label">Price for Carry-bag</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" id="additionalPriceCaryyBag" placeholder="Price for Carry-bag" formControlName="additionalPriceCaryyBag"
+                      [ngClass]="{'is-invalid':addFlightForm.get('additionalPriceCaryyBag').touched && addFlightForm.get('additionalPriceCaryyBag').invalid}"
+                      required>
+                    <div *ngIf="addFlightForm.get('additionalPriceCaryyBag').touched && addFlightForm.get('additionalPriceCaryyBag').invalid" class="invalid-feedback">
+                      <div>Price for Carry-bag</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                      $
+                    </div>
+                </div>
+                <div class="form-group row">
+                  <label for="maxCarryBag" class="col-sm-5 col-form-label">Carry-bag number</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="maxCarryBag" placeholder="Carry-bag number" formControlName="maxCarryBag"
+                      [ngClass]="{'is-invalid':addFlightForm.get('maxCarryBag').touched && addFlightForm.get('maxCarryBag').invalid}"
+                      required>
+                    <div *ngIf="addFlightForm.get('maxCarryBag').touched && addFlightForm.get('maxCarryBag').invalid" class="invalid-feedback">
+                      <div>Carry-bag max number</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="tt1" class="col-sm-5 col-form-label">Travel time</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="tt1" placeholder="Travel Time" formControlName="travelTime"
+                      [ngClass]="{'is-invalid':addFlightForm.get('travelTime').touched && addFlightForm.get('travelTime').invalid}"
+                      required>
+                    <div *ngIf="addFlightForm.get('travelTime').touched && addFlightForm.get('travelTime').invalid" class="invalid-feedback">
+                      <div>Travel time is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="td1" class="col-sm-5 col-form-label">Travel distance</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="td1" placeholder="Travel Distance" formControlName="travelDistance"
+                      [ngClass]="{'is-invalid':addFlightForm.get('travelDistance').touched && addFlightForm.get('travelDistance').invalid}"
+                      required>
+                    <div *ngIf="addFlightForm.get('travelDistance').touched && addFlightForm.get('travelDistance').invalid"
+                      class="invalid-feedback">
+                      <div>Travel distance is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="startDest" class="col-sm-7 col-form-label">Start Destination</label>
+                  <div class="col-sm-5">
+                    <button type="button" *ngIf="startBool==true" class="btn btn-outline-success" (click)="Parametrization(1)" data-toggle="modal" data-target="#exampleModal6">Add</button>
+                    <button type="button" *ngIf="startBool!=true" class="btn btn-outline-danger" (click)="DeleteS(1)">Delete</button>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="endDest" class="col-sm-7 col-form-label">End Destination</label>
+                  <div class="col-sm-5">
+                    <button type="button" *ngIf="endBool==true" class="btn btn-outline-success" (click)="Parametrization(32)" data-toggle="modal" data-target="#exampleModal6">Add</button>
+                    <button type="button" *ngIf="endBool!=true" class="btn btn-outline-danger" (click)="DeleteS(2)">Delete</button>
+                  </div>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!addFlightForm.valid" (click)="AddFlight()">Save
+              changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--MODALS FOR FLIGHTS *EDIT*-->
+
+<div class="modal fade" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel5">Edit flight</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content">
+            <form class="form" [formGroup]="editFlightForm" id="editFlightForm">
+              <div class="form-group row">
+                  <label for="price1" class="col-sm-5 col-form-label">Price</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" id="price1" placeholder="Price" formControlName="price"
+                      [ngClass]="{'is-invalid':editFlightForm.get('price').touched && editFlightForm.get('price').invalid}"
+                      required>
+                    <div *ngIf="editFlightForm.get('price').touched && editFlightForm.get('price').invalid" class="invalid-feedback">
+                      <div>Price is required</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                      $
+                    </div>
+                </div>
+                <div class="form-group row">
+                  <label for="additionalPriceCheckBag" class="col-sm-5 col-form-label">Price for Check-bag</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" id="additionalPriceCheckBag1" placeholder="Price for Check-bag" formControlName="additionalPriceCheckBag"
+                      [ngClass]="{'is-invalid':editFlightForm.get('additionalPriceCheckBag').touched && editFlightForm.get('additionalPriceCheckBag').invalid}"
+                      required>
+                    <div *ngIf="editFlightForm.get('additionalPriceCheckBag').touched && editFlightForm.get('additionalPriceCheckBag').invalid" class="invalid-feedback">
+                      <div>Price for Check-bag</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                      $
+                    </div>
+                </div>
+                <div class="form-group row">
+                  <label for="maxCheckBag" class="col-sm-5 col-form-label">Check-bag number</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="maxCheckBag1" placeholder="Check-bag number" formControlName="maxCheckBag"
+                      [ngClass]="{'is-invalid':editFlightForm.get('maxCheckBag').touched && editFlightForm.get('maxCheckBag').invalid}"
+                      required>
+                    <div *ngIf="editFlightForm.get('maxCheckBag').touched && editFlightForm.get('maxCheckBag').invalid" class="invalid-feedback">
+                      <div>Check-bag max number</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="additionalPriceCaryyBag1" class="col-sm-5 col-form-label">Price for Carry-bag</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" id="additionalPriceCaryyBag1" placeholder="Price for Carry-bag" formControlName="additionalPriceCaryyBag"
+                      [ngClass]="{'is-invalid':editFlightForm.get('additionalPriceCaryyBag').touched && editFlightForm.get('additionalPriceCaryyBag').invalid}"
+                      required>
+                    <div *ngIf="editFlightForm.get('additionalPriceCaryyBag').touched && editFlightForm.get('additionalPriceCaryyBag').invalid" class="invalid-feedback">
+                      <div>Price for Carry-bag</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                      $
+                    </div>
+                </div>
+                <div class="form-group row">
+                  <label for="maxCarryBag" class="col-sm-5 col-form-label">Carry-bag number</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="maxCarryBag1" placeholder="Carry-bag number" formControlName="maxCarryBag"
+                      [ngClass]="{'is-invalid':editFlightForm.get('maxCarryBag').touched && editFlightForm.get('maxCarryBag').invalid}"
+                      required>
+                    <div *ngIf="editFlightForm.get('maxCarryBag').touched && editFlightForm.get('maxCarryBag').invalid" class="invalid-feedback">
+                      <div>Carry-bag number</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="tt1" class="col-sm-5 col-form-label">Travel time</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="tt11" placeholder="Travel Time" formControlName="travelTime"
+                      [ngClass]="{'is-invalid':editFlightForm.get('travelTime').touched && editFlightForm.get('travelTime').invalid}"
+                      required>
+                    <div *ngIf="editFlightForm.get('travelTime').touched && editFlightForm.get('travelTime').invalid" class="invalid-feedback">
+                      <div>Travel time is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="td1" class="col-sm-5 col-form-label">Travel distance</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="td11" placeholder="Travel Distance" formControlName="travelDistance"
+                      [ngClass]="{'is-invalid':editFlightForm.get('travelDistance').touched && editFlightForm.get('travelDistance').invalid}"
+                      required>
+                    <div *ngIf="editFlightForm.get('travelDistance').touched && editFlightForm.get('travelDistance').invalid"
+                      class="invalid-feedback">
+                      <div>Travel distance is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="startDest" class="col-sm-7 col-form-label">Start Destination</label>
+                  <div class="col-sm-5">
+                    <button type="button" *ngIf="startBool==true" class="btn btn-outline-success" (click)="Parametrization(1)" data-toggle="modal" data-target="#exampleModal6">Add</button>
+                    <button type="button" *ngIf="startBool!=true" class="btn btn-outline-danger" (click)="DeleteS(1)">Delete</button>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="endDest" class="col-sm-7 col-form-label">End Destination</label>
+                  <div class="col-sm-5">
+                    <button type="button" *ngIf="endBool==true" class="btn btn-outline-success" (click)="Parametrization(32)" data-toggle="modal" data-target="#exampleModal6">Add</button>
+                    <button type="button" *ngIf="endBool!=true" class="btn btn-outline-danger" (click)="DeleteS(2)">Delete</button>
+                  </div>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!editFlightForm.valid" (click)="EditFlight()">Save
+              changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--ADD FLight Stop-->
+<div class="modal fade" id="exampleModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel4">Add flight stop</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="addStopForm" id="addStopForm">
+            <div class="form-group row">
+              <label for="takeoff" class="col-sm-4 col-form-label">Take off</label>
+              <div class="col-sm-8">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker2" class="form-control" id="takeoff" formControlName="takeoff"
+                    placeholder="Take off" [ngClass]="{'is-invalid':addStopForm.get('takeoff').touched && addStopForm.get('takeoff').invalid}"
+                    required>
+                  <div *ngIf="addStopForm.get('takeoff').touched && addStopForm.get('takeoff').invalid" class="invalid-feedback">
+                    <div>Travel time is required</div>
+                  </div>
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="time" class="col-sm-4 col-form-label">Time</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="time" placeholder="Time" formControlName="time" [ngClass]="{'is-invalid':addStopForm.get('time').touched && addStopForm.get('time').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('time').touched && addStopForm.get('time').invalid" class="invalid-feedback">
+                  <div>Time is invalid!</div>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                  hh:mm
+                </div>
+            </div>
+            <h6>Location: </h6>
+            <hr>
+            <div class="form-group row">
+              <label for="code" class="col-sm-4 col-form-label">Code</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="code" placeholder="Code" formControlName="code" [ngClass]="{'is-invalid':addStopForm.get('code').touched && addStopForm.get('code').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('code').touched && addStopForm.get('code').invalid" class="invalid-feedback">
+                  <div>Code is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="adress" class="col-sm-4 col-form-label">Adress</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="name" placeholder="Adress" formControlName="adress"
+                  [ngClass]="{'is-invalid':addStopForm.get('adress').touched && addStopForm.get('adress').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('adress').touched && addStopForm.get('adress').invalid" class="invalid-feedback">
+                  <div>Adress is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Latitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lat" placeholder="lat" formControlName="lat" [ngClass]="{'is-invalid':addStopForm.get('lat').touched && addStopForm.get('lat').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('lat').touched && addStopForm.get('lat').invalid" class="invalid-feedback">
+                  <div>Latitude is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Longitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lng" placeholder="lng" formControlName="lng" [ngClass]="{'is-invalid':addStopForm.get('lng').touched && addStopForm.get('lng').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('lng').touched && addStopForm.get('lng').invalid" class="invalid-feedback">
+                  <div>Longitude is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!addStopForm.valid" (click)="AddFlightStop()">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--ADD FLight Stop-->
+<div class="modal fade" id="exampleModal6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel6" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel6">Add flight stop</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="addStopForm" id="addStopForm">
+            <div class="form-group row">
+              <label for="takeoff1" class="col-sm-4 col-form-label">Take off</label>
+              <div class="col-sm-8">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker22" class="form-control" id="takeoff1" formControlName="takeoff"
+                    placeholder="Take off" [ngClass]="{'is-invalid':addStopForm.get('takeoff').touched && addStopForm.get('takeoff').invalid}"
+                    required>
+                  <div *ngIf="addStopForm.get('takeoff').touched && addStopForm.get('takeoff').invalid" class="invalid-feedback">
+                    <div>Travel time is required</div>
+                  </div>
+                  <mat-datepicker-toggle matSuffix [for]="picker22"></mat-datepicker-toggle>
+                  <mat-datepicker #picker22></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="time1" class="col-sm-4 col-form-label">Time</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="time1" placeholder="Time" formControlName="time" [ngClass]="{'is-invalid':addStopForm.get('time').touched && addStopForm.get('time').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('time').touched && addStopForm.get('time').invalid" class="invalid-feedback">
+                  <div>Time is invalid!</div>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                 hh:mm
+                </div>
+            </div>
+            <h6>Location: </h6>
+            <hr>
+            <div class="form-group row">
+              <label for="code1" class="col-sm-4 col-form-label">Code</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="code1" placeholder="Code" formControlName="code" [ngClass]="{'is-invalid':addStopForm.get('code').touched && addStopForm.get('code').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('code').touched && addStopForm.get('code').invalid" class="invalid-feedback">
+                  <div>Code is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="adress1" class="col-sm-4 col-form-label">Adress</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="name1" placeholder="Adress" formControlName="adress"
+                  [ngClass]="{'is-invalid':addStopForm.get('adress').touched && addStopForm.get('adress').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('adress').touched && addStopForm.get('adress').invalid" class="invalid-feedback">
+                  <div>Adress is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat1" class="col-sm-4 col-form-label">Latitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lat1" placeholder="lat" formControlName="lat" [ngClass]="{'is-invalid':addStopForm.get('lat').touched && addStopForm.get('lat').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('lat').touched && addStopForm.get('lat').invalid" class="invalid-feedback">
+                  <div>Latitude is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat1" class="col-sm-4 col-form-label">Longitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lng1" placeholder="lng" formControlName="lng" [ngClass]="{'is-invalid':addStopForm.get('lng').touched && addStopForm.get('lng').invalid}"
+                  required>
+                <div *ngIf="addStopForm.get('lng').touched && addStopForm.get('lng').invalid" class="invalid-feedback">
+                  <div>Longitude is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary"  data-dismiss="modal" [disabled]="!addStopForm.valid" (click)="AddStop()">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Location-->
+<div class="modal fade" id="exampleModal90" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel90" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">Edit location</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content">
+            <form class="form" [formGroup]="editLocationForm" id="editLocationForm">
+              <div class="form-group row">
+                <label for="code" class="col-sm-4 col-form-label">Code</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="code212" placeholder="Code" formControlName="code" [ngClass]="{'is-invalid':editLocationForm.get('code').touched && editLocationForm.get('code').invalid}"
+                    required>
+                  <div *ngIf="editLocationForm.get('code').touched && editLocationForm.get('code').invalid" class="invalid-feedback">
+                    <div>Code is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="adress" class="col-sm-4 col-form-label">Adress</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="name212" placeholder="Adress" formControlName="adress"
+                    [ngClass]="{'is-invalid':editLocationForm.get('adress').touched && editLocationForm.get('adress').invalid}"
+                    required>
+                  <div *ngIf="editLocationForm.get('adress').touched && editLocationForm.get('adress').invalid" class="invalid-feedback">
+                    <div>Adress is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="lat" class="col-sm-4 col-form-label">Latitude</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="lat21" placeholder="lat" formControlName="lat" [ngClass]="{'is-invalid':editLocationForm.get('lat').touched && editLocationForm.get('lat').invalid}"
+                    required>
+                  <div *ngIf="editLocationForm.get('lat').touched && editLocationForm.get('lat').invalid" class="invalid-feedback">
+                    <div>Latitude is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="lat" class="col-sm-4 col-form-label">Longitude</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="lng21" placeholder="lng" formControlName="lng" [ngClass]="{'is-invalid':editLocationForm.get('lng').touched && editLocationForm.get('lng').invalid}"
+                    required>
+                  <div *ngIf="editLocationForm.get('lng').touched && editLocationForm.get('lng').invalid" class="invalid-feedback">
+                    <div>Longitude is required</div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!editLocationForm.valid" (click)="EditLocation()">Save
+              changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

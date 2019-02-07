@@ -1,0 +1,54 @@
+
+<div class="container">
+        <main class="innerContainer">
+          <div class="movie">
+            <h3 class="movieTitle">Flight informations</h3>
+            <div class="movieDetails">{{flight.startDestination.location.adress}} - {{flight.endDestination.location.adress}}</div>
+          </div>
+      
+          <div class="legend">
+            <span class="fas fa-stop fa-2x freeSeat"></span> FREE
+            <span class="fas fa-stop fa-2x reservedSeat"></span> TAKEN
+            <span class="fas fa-stop fa-2x selectedSeat"></span> SELECTED
+            <span class="fas fa-stop fa-2x fastSeat"></span> FAST
+          </div>
+      
+          <br>
+          <br>
+          <hr>
+          <div class="row">
+            <div class="col-8">
+              <div *ngFor="let row of rows;let j = index">
+                <span class="seat" *ngFor="let item of seats.slice(j*20,j*20+20);let i = index" (click)="seatClicked(item,i,j)" [ngSwitch]="getStatus(item,j,i)">
+                  <span *ngSwitchCase="'notactive'" class="notActiveSeat"><i class="fas fa-stop fa-2x"></i></span>
+                  <span *ngSwitchCase="'reserved'" class="reservedSeat"><i class="fas fa-stop fa-2x"></i></span>
+                  <span *ngSwitchCase="'fast'" class="fastSeat"><i class="fas fa-stop fa-2x"></i></span>
+                  <span *ngSwitchCase="'selected'" class="selectedSeat"><i class="fas fa-stop fa-2x"></i></span>
+                  <span *ngSwitchDefault class="freeSeat"><i class="fas fa-stop fa-2x"></i></span>
+                </span>
+              </div>
+      
+            </div>
+            <div class="col-4">
+                <div class="container">
+                    <div *ngIf="selected.length > 0" class="font14 marginTB10">
+                            <div class="wordWrap">Seats reserved : {{selected.length}}</div>
+                            <div class="wordWrap">One seat: {{pricePerSeat}} $</div>
+                            <div class="wordWrap">Additional price : {{additionalPrice}}</div>
+                            <div class="wordWrap">Total: {{total}}</div>
+                            <ul>
+                                <ol *ngFor="let item of selected">{{item.seatCode}}</ol>
+                            </ul>
+                        </div>
+                    </div>
+                    <br>
+                        <!-- Action buttons -->
+                        <div class="buttonBar marginTop5">
+                            <button (click)="clearSelected()" [disabled]="selected.length === 0" class="btn btn-default btn-sm">Clear</button>
+                            <button (click)="showSelected()" [disabled]="selected.length === 0" class="btn btn-success btn-sm">Buy Tickets</button>
+                        </div>   
+            </div>
+          </div>
+      
+        </main>
+      </div>

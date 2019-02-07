@@ -1,0 +1,168 @@
+<div class="container">
+  <br>
+  <form class="form" [formGroup]="searchForm" id="searchForm">
+    <div class="row">
+      <div class="col-2">
+        <select class="form-control" id="type" formControlName="typetrip">
+          <option [value]="'ROUND-TRIP'">Round trip</option>
+          <option [value]="'ONE-WAY'">One way</option>
+        </select>
+      </div>
+      <div class="col-2"> <select class="form-control" id="num" formControlName="num">
+          <option [value]="1">1 Adult</option>
+          <option [value]="2">2 Adult</option>
+        </select>
+      </div>
+      <div class="col-2"> <select class="form-control" id="class" formControlName="class">
+          <option [value]="'BUSINESS'">Business</option>
+          <option [value]="'ECONOMIC'">Economic</option>
+          <option [value]="'FIRSTCLASS'">First class</option>
+        </select>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-2">
+
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="material-icons">airplanemode_active</i></span>
+          </div>
+          <input type="text" class="form-control" formControlName="from" placeholder="FROM" id="from">
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="material-icons">airplanemode_active</i></span>
+          </div>
+          <input type="text" class="form-control" formControlName="to" placeholder="TO" id="to">
+        </div>
+      </div>
+      <div class="col-3">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker2" class="form-control" id="takeoff" formControlName="takeoff"
+            placeholder="Take off" [ngClass]="{'is-invalid':searchForm.get('takeoff').touched && searchForm.get('takeoff').invalid}"
+            required>
+          <div *ngIf="searchForm.get('takeoff').touched && searchForm.get('takeoff').invalid" class="invalid-feedback">
+            <div>Travel time is required</div>
+          </div>
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-3">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker1" class="form-control" id="landing" formControlName="landing"
+            placeholder="Landing" [ngClass]="{'is-invalid':searchForm.get('landing').touched && searchForm.get('landing').invalid}"
+            required>
+          <div *ngIf="searchForm.get('landing').touched && searchForm.get('landing').invalid" class="invalid-feedback">
+            <div>Travel time is required</div>
+          </div>
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" [disabled]="!searchForm.valid" (click)=" SearchForFlights()">Search</button>
+      </div>
+    </div>
+
+  </form>
+  <hr>
+
+  <h2 style="color:dodgerblue" class="text-left mb-3">Avio companies</h2>
+  <ul class="list-group" style="margin-bottom: 20px;">
+    <li *ngFor="let item of allComp" class="list-group-item">
+      <div class="row">
+        <div class="col-1">
+          <i style="margin-top: 50px; margin-left: 15px" class="material-icons">airplanemode_active</i>
+          <p style="text-align: center;" class="thick">{{item.name}}</p>
+        </div>
+        <div class="separator">
+        </div>
+        <div class="col-4">
+          <agm-map [latitude]="item.location.lat" [longitude]="item.location.lng">
+            <agm-marker [latitude]="item.location.lat" [longitude]="item.location.lng"></agm-marker>
+          </agm-map>
+        </div>
+        <div class="separator">
+        </div>
+        <div class="col-2">
+          <p class="thick">Destinations:</p>
+          <ul>
+            <li *ngFor="let el of item.destinations">
+
+              {{el.adress}}
+            </li>
+
+          </ul>
+        </div>
+        <div class="separator">
+        </div>
+        <div style="margin-left: 40px; margin-top: 55px" class="col-2">
+          <div *ngIf="item.rateCount != 0; then thenBlockHasRate else elseBlockHasRate"></div>
+          <ng-template #thenBlockHasRate>
+            <div class="profile-stars">
+              <!-- START NO 1-->
+              <div *ngIf="(item.rate/item.rateCount) < 0.5; then thenBlock1 else elseBlock1"></div>
+              <ng-template #thenBlock1><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock1>
+                <div *ngIf="(item.rate/item.rateCount) < 1; then thenBlock11 else elseBlock11"></div>
+                <ng-template #thenBlock11><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock11><i class="material-icons">star</i></ng-template>
+              </ng-template>
+              <!-- START NO 2-->
+              <div *ngIf="(item.rate/item.rateCount) < 1.5; then thenBlock2 else elseBlock2"></div>
+              <ng-template #thenBlock2><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock2>
+                <div *ngIf="(item.rate/item.rateCount) < 2; then thenBlock22 else elseBlock22"></div>
+                <ng-template #thenBlock22><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock22><i class="material-icons">star</i></ng-template>
+              </ng-template>
+              <!-- START NO 3-->
+              <div *ngIf="(item.rate/item.rateCount) < 2.5; then thenBlock3 else elseBlock3"></div>
+              <ng-template #thenBlock3><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock3>
+                <div *ngIf="(item.rate/item.rateCount) < 3; then thenBlock33 else elseBlock33"></div>
+                <ng-template #thenBlock33><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock33><i class="material-icons">star</i></ng-template>
+              </ng-template>
+              <!-- START NO 4-->
+              <div *ngIf="(item.rate/item.rateCount) < 3.5; then thenBlock4 else elseBlock4"></div>
+              <ng-template #thenBlock4><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock4>
+                <div *ngIf="(item.rate/item.rateCount) < 4; then thenBlock44 else elseBlock44"></div>
+                <ng-template #thenBlock44><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock44><i class="material-icons">star</i></ng-template>
+              </ng-template>
+              <!-- START NO 5-->
+              <div *ngIf="(item.rate/item.rateCount) < 4.5; then thenBlock5 else elseBlock5"></div>
+              <ng-template #thenBlock5><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock5>
+                <div *ngIf="(item.rate/item.rateCount) < 5; then thenBlock55 else elseBlock55"></div>
+                <ng-template #thenBlock55><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock55><i class="material-icons">star</i></ng-template>
+              </ng-template>
+            </div>
+            <p class="thick" style="margin-left: 35px">{{item.rate/item.rateCount}}/5</p>
+          </ng-template>
+          <ng-template #elseBlockHasRate>
+            <p class="thick" style="margin-left: 65px; margin-top: 5px">Still not rated</p>
+          </ng-template>
+        </div>
+        <div class="separator">
+        </div>
+        <div style="text-align: center; margin-left: 15px; margin-top: 60px" class="col-2">
+          <button type="button" class="btn btn-outline-success" routerLink="company/{{item.id}}">See page
+          </button>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+
+
+
+
+</div>

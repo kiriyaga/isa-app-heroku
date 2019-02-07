@@ -1,0 +1,118 @@
+
+<div class="container">
+  <main class="innerContainer">
+    <div class="movie">
+      <h3 class="movieTitle">Flight informations</h3>
+      <div class="movieDetails">{{flight.startDestination.location.adress}} - {{flight.endDestination.location.adress}}</div>
+    </div>
+
+    <div class="legend">
+      <span class="fas fa-stop fa-2x freeSeat"></span> FREE
+      <span class="fas fa-stop fa-2x reservedSeat"></span> TAKEN
+      <span class="fas fa-stop fa-2x notActiveSeat"></span> NOTACTIVE
+      <span class="fas fa-stop fa-2x fastSeat"></span> FAST
+    </div>
+
+    <br>
+    <br>
+    <hr>
+    <div class="row">
+      <div class="col-8">
+        <div *ngFor="let row of rows;let j = index">
+          <span class="seat" *ngFor="let item of seats.slice(j*20,j*20+20);let i = index"  data-toggle="modal" data-target="#exampleModal2" (click)="seatClicked(item,i,j)" [ngSwitch]="getStatus(item,j,i)">
+            <span *ngSwitchCase="'notactive'" class="notActiveSeat"><i class="fas fa-stop fa-2x"></i></span>
+            <span *ngSwitchCase="'reserved'" class="reservedSeat"><i class="fas fa-stop fa-2x"></i></span>
+            <span *ngSwitchCase="'fast'" class="fastSeat"><i class="fas fa-stop fa-2x"></i></span>
+            <span *ngSwitchDefault class="freeSeat"><i class="fas fa-stop fa-2x"></i></span>
+          </span>
+        </div>
+
+      </div>
+      <div class="col-4">
+      <button type="button" style="width:200px" class="btn btn-success" (click)="AddSeat()">Add Seat</button>
+      <br>
+      <br>
+      <button type="button" style="width:200px" class="btn btn-primary" (click)="SaveSeats()">Save
+        changes</button>
+        <br>
+        <br>
+        <button type="button" style="width:200px" class="btn btn-warning" routerLink="/avio/adminpanel" >Back to admin panel</button>
+  
+      </div>
+    </div>
+
+  </main>
+</div>
+
+
+<!--MODALS FOR FLIGHTS *ADD*-->
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel3">Seat Menager</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content">
+            <form class="form" [formGroup]="seatForm" id="seatForm">
+              <div class="form-group row">
+                <label for="seattype" class="col-sm-4 col-form-label">Seat type</label>
+                <div class="col-sm-8">
+                  <select class="form-control"  id="seattype" formControlName="seattype">
+                      <option [value]="'AVAILABLE'">AVALIVABLE</option>
+                      <option [value]="'RESERVED'">RESERVED</option>
+                      <option [value]="'NOTACTIVE'">NOTACTIVE</option>
+                      <option [value]="'FASTRESERVE'">FASTRESERVE</option>
+                    </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                  <label for="seatclass" class="col-sm-4 col-form-label">Seat class</label>
+                  <div class="col-sm-8">
+                    <select class="form-control"  id="seatclass" formControlName="seatclass">
+                        <option [value]="'BUSINESS'">BUSINESS</option>
+                        <option [value]="'ECONOMIC'">ECONOMIC</option>
+                        <option [value]="'FIRSTCLASS'">FIRSTCLASS</option>
+                      </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="addprice" class="col-sm-4 col-form-label">Additional price</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="addprice" placeholder="Additional price" formControlName="addprice" [ngClass]="{'is-invalid':seatForm.get('addprice').touched && seatForm.get('addprice').invalid}"
+                      required>
+                    <div *ngIf="seatForm.get('addprice').touched && seatForm.get('addprice').invalid" class="invalid-feedback">
+                      <div>Additional price is required</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                    $
+                  </div>
+                </div>
+                <div *ngIf="seatForm.get('seattype').value == 'FASTRESERVE'"class="form-group row">
+                  <label for="discount" class="col-sm-4 col-form-label">Discount</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="addprice" placeholder="" formControlName="discount" [ngClass]="{'is-invalid':seatForm.get('discount').touched && seatForm.get('discount').invalid}">
+                  </div>
+                  <div *ngIf="seatForm.get('discount').touched && seatForm.get('discount').invalid" class="invalid-feedback">
+                      <div>Invalid discount</div>
+                    </div>
+                  <div class="col-sm-1">
+                    %
+                  </div>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="SaveSeat()">Save
+              changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

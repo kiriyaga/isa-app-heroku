@@ -1,0 +1,169 @@
+<div class="container bootstrap snippet">
+  <br><br>
+
+  <!--form-row kontejner za sliku i polja-->
+  <div class="form-row">
+    <!--kolona za sliku-->
+    <div class="col-md-3" id="profilPic">
+      <div class="text-center">
+        <!--row kontejner za naslov-->
+        <h3>{{user.username}}</h3>
+        <!--row kontejner za naslov-->
+        <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="rounded-circle img-thumbnail" alt="avatar">
+        <button style="margin-top: 10px" (click)="fileInput.click()" class="btn btn-default">Upload</button>
+        <span style="visibility: hidden; position: fixed; overflow: hidden; width: 0px; height:0px; border:none; margin:0; padding:0">
+          <input type="file" />
+        </span>
+      </div>
+
+      <br>
+      <div class="panel panel-default text-center">
+        <div class="panel-body">
+          <div class="profile-stars">
+            <i class="material-icons">star</i>
+            <i class="material-icons">star</i>
+            <i class="material-icons">star_border</i>
+          </div>
+          <button class="btn btn-dark">{{user.authority}}</button>
+        </div>
+      </div>
+
+    </div>
+    <!--kolona za sliku-->
+    <!--kolona za podatke-->
+    <div class="col-md-8">
+      <div class="tab-content">
+        <form class="form" [formGroup]="basicForm" id="basicForm">
+          <h5>Basic info: </h5>
+          <div class="form-group">
+            <div class="form-row">
+              <div class="col-md-4">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">account_circle</i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="FIRST NAME" id="first-name-value"
+                    formControlName="firstName" [ngClass]="{'is-invalid':basicForm.get('firstName').touched && basicForm.get('firstName').invalid}"
+                    required>
+                  <div *ngIf="basicForm.get('firstName').touched && basicForm.get('firstName').invalid" class="invalid-feedback">
+                    <div>First name is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">account_circle</i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="LAST NAME" id="last-name-value" formControlName="lastName"
+                    [ngClass]="{'is-invalid':basicForm.get('lastName').touched && basicForm.get('lastName').invalid}"
+                    required>
+                  <div *ngIf="basicForm.get('lastName').touched && basicForm.get('lastName').invalid" class="invalid-feedback">
+                    <div>Last name is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-4">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">email</i></span>
+                  </div>
+                  <input type="email" class="form-control" placeholder="EMAIL" id="email-value" formControlName="email"
+                    [ngClass]="{'is-invalid':basicForm.get('email').touched && basicForm.get('email').invalid}"
+                    required>
+                  <div *ngIf="basicForm.get('email').touched && basicForm.get('email').invalid" class="invalid-feedback">
+                    kurec
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">email</i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="ADRESS" id="adress-value" formControlName="adress">
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-4">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">account_circle</i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="TELEPHONE" id="telephone-value" formControlName="telephone">
+                  <div *ngIf="basicForm.get('telephone').touched && basicForm.get('telephone').invalid" class="invalid-feedback">
+                    kurec
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary" [disabled]="!basicForm.valid" (click)="saveBasic()">Save</button>
+          </div>
+        </form>
+        <hr />
+        <form class="form" [formGroup]="passwordForm" id="passwordForm">
+          <h5>Password change: </h5>
+          <div class="form-group">
+            <div class="form-row">
+              <div class="col-md-4">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">visibility_off</i></span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="CURRENT PASSWORD" id="c_password-value"
+                    formControlName="cpassword" [ngClass]="{'is-invalid':passwordForm.get('cpassword').touched && passwordForm.get('cpassword').invalid}"
+                    required>
+                  <div *ngIf="passwordForm.get('cpassword').touched && passwordForm.get('cpassword').invalid" class="invalid-feedback">
+                    <div *ngIf="passwordForm.get('cpassword').errors.currentPasswordError">{{errorMessage}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-4">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">visibility_off</i></span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="PASSWORD" id="password-value"
+                    formControlName="password" [ngClass]="{'is-invalid':passwordForm.get('password').touched && passwordForm.get('password').invalid}"
+                    required>
+                  <div *ngIf="passwordForm.get('password').touched && passwordForm.get('password').invalid" class="invalid-feedback">
+                    <div *ngIf="passwordForm.get('password').errors.passwordError">{{errorMessage}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-4">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">visibility_off</i></span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="CONFIRM PASSWORD" id="confirm-password-value"
+                    formControlName="confirmPassword" [ngClass]="{'is-invalid':passwordForm.get('confirmPassword').touched && passwordForm.get('confirmPassword').invalid}">
+                  <div *ngIf="passwordForm.get('confirmPassword').touched && passwordForm.get('confirmPassword').invalid"
+                    class="invalid-feedback">
+                    <div *ngIf="passwordForm.get('confirmPassword').errors?.matchOther">Passwords don't match</div>
+                    <div *ngIf="passwordForm.get('confirmPassword').errors.confirmPasswordError">{{errorMessage}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary" [disabled]="!passwordForm.valid" (click)="savePassword()">Change
+              password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!--kolona za podatke-->
+  </div>
+  <!--form-row kontejner za sliku i polja-->
+</div>

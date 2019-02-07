@@ -1,0 +1,38 @@
+<form name="loginForm" [formGroup]="loginForm" (ngSubmit)="loginForm.valid && onSubmit()" class="col-sm-4">
+  <div class="imgcontainer">
+    <img src="assets\images\logo.png" alt="Logo picture">
+  </div>
+  <div class="container" id="login-form">
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="material-icons">account_circle</i></span>
+          </div>
+          <input type="text" class="form-control" placeholder="USERNAME" id="username-value" formControlName="username"
+            [ngClass]="{'is-invalid':loginForm.get('username').touched && loginForm.get('username').invalid}" required>
+          <div *ngIf="loginForm.get('username').touched && loginForm.get('username').invalid" class="invalid-feedback">
+            <div *ngIf="loginForm.get('username').errors.required">Username is required</div>
+            <div *ngIf="loginForm.get('username').errors.usernameError">{{errorMessage}}</div>
+          </div>
+        </div>
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="material-icons">visibility_off</i></span>
+          </div>
+          <input type="password" class="form-control" placeholder="PASSWORD" id="password-value" formControlName="password"
+            [ngClass]="{'is-invalid' : loginForm.get('password').touched && loginForm.get('password').invalid}" required />
+          <div *ngIf="loginForm.get('password').touched && loginForm.get('password').invalid" class="invalid-feedback">
+            <div *ngIf="loginForm.get('password').errors.required" >Password is required</div>
+            <div *ngIf="loginForm.get('password').errors.minlength">Password must be at least 5 character long</div>
+            <div *ngIf="loginForm.get('password').errors.passwordError">{{errorMessage}}</div>
+          </div>
+        </div>
+        <span class="psw"><a routerLink="/register">Don't have account? Register now!</a></span>
+      </div>
+    </div>
+    <div>
+      <button type="button" class="btn btn-primary" [disabled]="!loginForm.valid" (click)="onSubmit()">Sign In</button>
+    </div>
+  </div>
+</form>

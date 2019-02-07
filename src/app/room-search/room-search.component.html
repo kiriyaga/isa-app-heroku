@@ -1,0 +1,356 @@
+<div class="container">
+  <br>
+  <form class="form" [formGroup]="searchForm" id="searchForm">
+    <div class="form-row">
+      <div class="col-md-6">
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="material-icons">home</i></span>
+          </div>
+          <input type="text" class="form-control" placeholder="HOTEL NAME" id="hotelName" formControlName="hotelName">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="material-icons">location_on</i></span>
+          </div>
+          <input type="text" class="form-control" placeholder="HOTEL LOCATION" id="hotelLocation" formControlName="hotelLocation">
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-3">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker2" class="form-control" id="checkInDate" formControlName="checkInDate"
+            placeholder="Check in date">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-3">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker1" class="form-control" id="checkOutDate" formControlName="checkOutDate"
+            placeholder="Check out date">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div style="margin-top: 12px">
+        <button type="button" class="btn btn-primary" (click)="searchForRooms()">Search</button>
+        <button type="button" class="btn btn-secondary" style="margin-left: 30px" (click)="getAllRooms()">Reset</button>
+      </div>
+    </div>
+  </form>
+
+  <hr>
+
+  <h2 style="color:dodgerblue" class="text-left mb-3">Choose room</h2>
+  <ul class="list-group" style="margin-bottom: 20px;">
+    <li *ngFor="let item of searchedRooms" class="list-group-item">
+      <div class="row">
+        <div class="col-2">
+          <i style="margin-top: 50px; margin-left: 65px" class="material-icons">home</i>
+          <p style="text-align: center;" class="thick">{{item.hotelCompany.name}}</p>
+        </div>
+        <div class="separator">
+        </div>
+        <div class="col-2">
+
+          <agm-map [latitude]="item.hotelCompany.location.lat" [longitude]="item.hotelCompany.location.lng">
+            <agm-marker [latitude]="item.hotelCompany.location.lat" [longitude]="item.hotelCompany.location.lng"></agm-marker>
+          </agm-map>
+
+        </div>
+        <div class="separator">
+        </div>
+        <div style="margin-left: 40px; margin-top: 55px" class="col-2">
+          <div *ngIf="item.rateCount != 0; then thenBlockHasRate else elseBlockHasRate"></div>
+          <ng-template #thenBlockHasRate>
+            <div class="profile-stars">
+              <!-- START NO 1-->
+              <div *ngIf="(item.rate/item.rateCount) < 0.5; then thenBlock1 else elseBlock1"></div>
+              <ng-template #thenBlock1><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock1>
+                <div *ngIf="(item.rate/item.rateCount) < 1; then thenBlock11 else elseBlock11"></div>
+                <ng-template #thenBlock11><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock11><i class="material-icons">star</i></ng-template>
+              </ng-template>
+              <!-- START NO 2-->
+              <div *ngIf="(item.rate/item.rateCount) < 1.5; then thenBlock2 else elseBlock2"></div>
+              <ng-template #thenBlock2><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock2>
+                <div *ngIf="(item.rate/item.rateCount) < 2; then thenBlock22 else elseBlock22"></div>
+                <ng-template #thenBlock22><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock22><i class="material-icons">star</i></ng-template>
+              </ng-template>
+              <!-- START NO 3-->
+              <div *ngIf="(item.rate/item.rateCount) < 2.5; then thenBlock3 else elseBlock3"></div>
+              <ng-template #thenBlock3><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock3>
+                <div *ngIf="(item.rate/item.rateCount) < 3; then thenBlock33 else elseBlock33"></div>
+                <ng-template #thenBlock33><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock33><i class="material-icons">star</i></ng-template>
+              </ng-template>
+              <!-- START NO 4-->
+              <div *ngIf="(item.rate/item.rateCount) < 3.5; then thenBlock4 else elseBlock4"></div>
+              <ng-template #thenBlock4><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock4>
+                <div *ngIf="(item.rate/item.rateCount) < 4; then thenBlock44 else elseBlock44"></div>
+                <ng-template #thenBlock44><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock44><i class="material-icons">star</i></ng-template>
+              </ng-template>
+              <!-- START NO 5-->
+              <div *ngIf="(item.rate/item.rateCount) < 4.5; then thenBlock5 else elseBlock5"></div>
+              <ng-template #thenBlock5><i class="material-icons">star_border</i></ng-template>
+              <ng-template #elseBlock5>
+                <div *ngIf="(item.rate/item.rateCount) < 5; then thenBlock55 else elseBlock55"></div>
+                <ng-template #thenBlock55><i class="material-icons">star_half</i></ng-template>
+                <ng-template #elseBlock55><i class="material-icons">star</i></ng-template>
+              </ng-template>
+            </div>
+            <p class="thick" style="margin-left: 35px">{{item.room.rate/item.room.rateCount}}/5</p>
+          </ng-template>
+          <ng-template #elseBlockHasRate>
+            <p class="thick" style="margin-left: 65px; margin-top: 5px">Still not rated</p>
+          </ng-template>
+        </div>
+        <div class="separator">
+        </div>
+        <div class="col-2">
+          <p class="thick" style="margin-left: 5px; margin-top: 30px">floor: {{item.room.floor}}.</p>
+          <p class="thick" style="margin-left: 5px;">room number: {{item.room.number}}</p>
+          <p class="thick" style="margin-left: 5px;">bed(s): {{item.room.numberOfBeds}}</p>
+        </div>
+        <div class="separator">
+        </div>
+        <div class="col-2">
+          <p class="thick" style="margin-left: 35px; margin-top: 70px">from {{item.room.nextHalfYearPrice}}$</p>
+        </div>
+        <div class="col-1">
+          <button type="button" class="btn btn-outline-success" style="text-align: center; margin-left: 15px; margin-top: 65px"
+            (click)="bookRoom(item)" data-toggle="modal" data-target="#bookRoomModal">Book</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+<br>
+<br>
+<br>
+
+<!--MODALS FOR ROOM RESERVATION-->
+<div class="modal fade" id="bookRoomModal" tabindex="-1" role="dialog" aria-labelledby="bookRoomModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel3">Room reservation info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="bookRoomForm" id="bookRoomForm">
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <label for="checkInDateString" class="col-sm-3 col-form-label">Check in</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.checkInDateString}}</p>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <label for="checkOutDateString" class="col-sm-3 col-form-label">Check out</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.checkOutDateString}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <label for="roomFloor" class="col-sm-2 col-form-label">Floor</label>
+              <div class="col-sm-1">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.roomFloor}}</p>
+              </div>
+              <div class="col-sm-2"></div>
+              <label for="roomNumber" class="col-sm-2 col-form-label">Number</label>
+              <div class="col-sm-1">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.roomNumber}}</p>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="roomNumberOfBeds" class="col-sm-4 col-form-label">Number of beds</label>
+              <div class="col-sm-1">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.roomNumberOfBeds}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <h5 for="services" class="col-sm-6 col-form-label" style="text-align: center; font-weight: bolder">Hotel
+                services included</h5>
+              <div class="col-sm-3"></div>
+            </div>
+            <div class="form-group row" *ngIf="transportFromAirportBool == true">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="transportFromAirport" (change)="changeCheckBox($event)"
+                        formControlName="transportFromAirport">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="transportFromAirport" class="col-sm-5 col-form-label">Transport from airport</label>
+              <div class="col-sm-2">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.transportFromAirportPrice}}$</p>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="transportToAirportBool == true">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="transportToAirport" (change)="changeCheckBox($event)" formControlName="transportToAirport">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="transportToAirport" class="col-sm-5 col-form-label">Transport to airport</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.transportToAirportPrice}}$</p>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="parkingBool == true">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="parking" (change)="changeCheckBox($event)" formControlName="parking">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="parking" class="col-sm-5 col-form-label">Parking</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.parkingPrice}}$</p>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="swimmingPoolBool == true">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="swimmingPool" (change)="changeCheckBox($event)" formControlName="swimmingPool">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="swimmingPool" class="col-sm-5 col-form-label">Swimming pool</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.swimmingPoolPrice}}$</p>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="restaurantBool == true">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="restaurant" (change)="changeCheckBox($event)" formControlName="restaurant">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="restaurant" class="col-sm-5 col-form-label">Restaurant</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.restaurantPrice}}$</p>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="roomServiceBool == true">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="roomService" (change)="changeCheckBox($event)" formControlName="roomService">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="roomService" class="col-sm-5 col-form-label">Room service</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.roomServicePrice}}$</p>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="wellnessBool == true">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="wellness" (change)="changeCheckBox($event)" formControlName="wellness">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="wellness" class="col-sm-5 col-form-label">Wellness</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.wellnessPrice}}$</p>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="spaCenterBool == true">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="spaCenter" (change)="changeCheckBox($event)" formControlName="spaCenter">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="spaCenter" class="col-sm-5 col-form-label">Spa center</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.spaCenterPrice}}$</p>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="wifiBool == true">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="wifi" (change)="changeCheckBox($event)" formControlName="wifi">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="wifi" class="col-sm-5 col-form-label">Wi-Fi</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.wifiPrice}}$</p>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <label for="checkInDateString" class="col-sm-3 col-form-label">Price</label>
+              <div class="col-sm-3">
+                <p class="thick" style="margin-left: 5px; margin-top: 7px">{{this.finalPrice}}$</p>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="makeReservation()">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

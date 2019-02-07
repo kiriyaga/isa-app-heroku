@@ -1,0 +1,61 @@
+agm-map {
+    height: 300px;
+  }
+  .banner {
+    margin-top: 0px;
+    height: 425px;
+    background-image: url("https://png2.kisspng.com/sh/f85efb5dc159e58e24e45a41330eff87/L0KzQYm3VcAyN6F0iZH0aYP2gLBuTfFqeqFxedDuLXHsgrT5gfZ1NZRmiuZ4b36wdMPolBlvb15ohNt5LXH1hH68gfU5PpY6SaRuZki6R3ACVcA3PGQ1SaMAMkW0SIO3U8MyQWM5RuJ3Zx==/kisspng-airplane-aircraft-cartoon-drawing-clip-art-5ae86e512ef877.9506430115251820331924.png"); 
+    background-repeat: no-repeat;
+  }
+  .innerContainer {
+    color: #000;
+    text-align: center;
+}
+
+h1 { color: #111; font-family: 'Helvetica Neue', sans-serif; font-size: 70px; font-weight: bold; letter-spacing: -1px; text-align:center;margin-left: 10px}
+h2 { color: #111; font-family: 'Open Sans', sans-serif; font-size: 30px; font-weight: 300; line-height: 32px;text-align: center;padding-left: 160px; margin-top: -14px}
+
+
+/* equal card height */
+.row-equal > div[class*='col-'] {
+  display: flex;
+  flex: 1 0 auto;
+}
+
+.row-equal .card {
+ width: 100%;
+}
+
+/* ensure equal card height inside carousel */
+.carousel-inner>.row-equal.active, 
+.carousel-inner>.row-equal.next, 
+.carousel-inner>.row-equal.prev {
+  display: flex;
+}
+
+/* prevent flicker during transition */
+.carousel-inner>.row-equal.active.left, 
+.carousel-inner>.row-equal.active.right {
+  opacity: 0.5;
+  display: flex;
+}
+
+
+/* control image height */
+.card-img-top-250 {
+  max-height: 250px;
+  overflow:hidden;
+}
+.table-wrapper-scroll-y {
+  display: block;
+  max-height: 400px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+  .separator{
+    border-right: 1px solid #333;
+  }
+
+  p.thick {
+    font-weight: bold;
+  }

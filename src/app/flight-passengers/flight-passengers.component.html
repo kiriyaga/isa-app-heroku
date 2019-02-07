@@ -1,0 +1,62 @@
+<div class="container">
+    <main class="innerContainer">
+        <div class="movie">
+          <h3 class="movieTitle">Flight informations</h3>
+          <div class="movieDetails">{{order.flight.startDestination.location.adress}} - {{order.flight.endDestination.location.adress}}</div>
+        </div>
+        </main>
+        <div class="movieDetails">Max number of carry bags: {{order.flight.maxCarryBag}} Price:{{order.flight.additionalPriceCarryBag}} $</div>
+        <div class="movieDetails">Max number of check bags: {{order.flight.maxCheckBag}} Price:{{order.flight.additionalPriceCheckBag}}$</div>
+        <br>
+        <div [formGroup]="orderForm">
+        <div formArrayName="items"
+        *ngFor="let item of orderForm.get('items').controls; let i = index;">
+        <div [formGroupName]="i">
+          Seat code: {{getSeatCode(i)}} , Passenger: {{i+1}}/{{order.seats.length}}
+        <div class="row">
+          <div class="col-3">
+          <div class="form-group">
+              <label for="fsa" class="col-sm-5 col-form-label">Name</label>
+          <input formControlName="name" class="form-control" placeholder="Name">
+          <span class="text-danger" *ngIf="getItemsFormGroup(i).controls['name'].touched && getItemsFormGroup(i).controls['name'].hasError('required')">
+              Name is required! </span>
+          </div>
+          </div>
+        <div class="col-3">
+            <label for="fsa" class="col-sm-5 col-form-label">Last name</label>
+            <input formControlName="lastname" class="form-control" placeholder="Last Name">
+            <span class="text-danger" *ngIf="getItemsFormGroup(i).controls['lastname'].touched && getItemsFormGroup(i).controls['lastname'].hasError('required')">
+               Last Name is required! </span>
+              </div>
+          <div class="col-3">
+              <label for="fsa" class="col-sm-5 col-form-label">Passport</label>
+              <input formControlName="passport" class="form-control" placeholder="Passport" >
+              <span class="text-danger" *ngIf="getItemsFormGroup(i).controls['passport'].touched && getItemsFormGroup(i).controls['passport'].hasError('required')">
+                Passport is required! </span>
+        </div>
+        <div class="col-3">
+                <label for="fa" class="col-sm-5 col-form-label">Carry Bag</label>
+                <input formControlName="carryBag" class="form-control" placeholder="Carry Bag" >
+                <span class="text-danger" *ngIf="getItemsFormGroup(i).controls['carryBag'].touched && getItemsFormGroup(i).controls['carryBag'].hasError('required')">
+                  Carry bag is invalid! </span>
+          </div>
+          <div class="col-3">
+                <label for="gga" class="col-sm-5 col-form-label">Check Bag</label>
+                <input formControlName="checkBag" class="form-control" placeholder="Check Bag" >
+                <span class="text-danger" *ngIf="getItemsFormGroup(i).controls['checkBag'].touched && getItemsFormGroup(i).controls['checkBag'].hasError('required')">
+                  Check bag is invalid! </span>
+          </div>
+
+      </div>
+      <br>
+      <hr>
+      </div>
+      </div>
+      <div style="margin-bottom: 65px">
+      <button (click)="clearSelected()"class="btn btn-default btn-sm">Cancel</button>
+      <button class="btn btn-success" [disabled]="!orderForm.valid" (click)="Reserve()" type="submit">Reserve</button>
+      </div>
+      </div>
+
+    
+  </div>

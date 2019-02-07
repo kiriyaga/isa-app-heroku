@@ -1,0 +1,103 @@
+<div class="container">
+    <main class="innerContainer">
+        <div class="movie">
+          <h3 class="movieTitle">Flight informations</h3>
+          <div class="movieDetails">{{order.flight.startDestination.location.adress}} - {{order.flight.endDestination.location.adress}}</div>
+        </div>
+        </main>
+  <br>
+  <div class="col align-self-center">
+    <form class="form" [formGroup]="search" id="search">
+      <div class="input-group form-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="material-icons">search</i></span>
+        </div>
+        <input type="text" class="form-control" formControlName="input" placeholder="SEARCH FOR FRIENDS" id="search-value">
+      </div>
+      <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModal" (click)="Search()">Search
+      </button>
+    </form>
+  </div>
+  <br>
+  <h2 class="text-center">FRIENDS</h2>
+
+
+
+  <!--TABELA ZA DESTINACIJE -->
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Username</th>
+        <th scope="col">Invite</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of currentFriends;let i = index">
+        <td>{{item.friendTwo.name}}</td>
+        <td>{{item.friendTwo.lastName}}</td>
+        <td> @{{item.friendTwo.username}}</td>
+        <td>
+          <span [ngSwitch]="getStatus(item)">
+            <span *ngSwitchCase="'notinvited'">
+              <div>
+                <a><i class="material-icons" (click)="Invite(item)" style="color: blue;">check_circle</i></a>
+              </div>
+            </span>
+            <span *ngSwitchDefault>
+              <div>
+                <a><i class="material-icons" (click)="NotInvite(item)" style="color: green;">check_circle</i></a>
+              </div>
+            </span>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <button (click)="clearSelected()"class="btn btn-default btn-sm">Cancel</button>
+  <button (click)="showSelected()" class="btn btn-success btn-sm">Next</button>
+
+
+
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Invite friends</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <ul class="widget-users row">
+            <li *ngFor="let item of searchFriends" class="col-md-3">
+              <div class="img">
+                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="picture1">
+              </div>
+              <div class="details">
+                <div class="name">
+                  <a href="#">{{item.friendTwo.name}} {{item.friendTwo.lastName}}</a>
+                </div>
+                <div>
+                    <span [ngSwitch]="getStatus(item)">
+                        <span *ngSwitchDefault> <a><i class="material-icons" (click)="NotInvite(item)" style="color: green">check_circle</i></a></span>
+                        <span *ngSwitchCase="'notinvited'"> <a><i class="material-icons" (click)="Invite(item)" style="color: blue">check_circle</i></a></span>
+                      </span>
+                  </div>
+              </div>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

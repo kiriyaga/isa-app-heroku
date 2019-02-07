@@ -1,0 +1,115 @@
+<div class="row">
+  <div class="col-2" style="margin-left: 30px">
+    <br>
+    <div class="container">
+    <form class="form" [formGroup]="searchForm" id="searchForm">
+    <p class="thick">Stops:</p>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" formControlName="ns" id="defaultCheck1">
+      <label class="form-check-label" for="defaultCheck1">
+        NONESTOP
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" formControlName="js" id="defaultCheck2">
+      <label class="form-check-label" for="defaultCheck2">
+        1STOP
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" formControlName="ds" id="defaultCheck3">
+      <label class="form-check-label" for="defaultCheck3">
+        2+STOPS
+      </label>
+    </div>
+    <p class="thick">Price:</p>
+    <div class="row"> <input class="form-control" formControlName="price" type="text" id="num">
+    </div>
+    <p class="thick">Class:</p>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" formControlName="ec" id="defaultCheck4">
+        <label class="form-check-label" for="defaultCheck4">
+          ECONOMIC
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox"formControlName="bc" id="defaultCheck5">
+        <label class="form-check-label" for="defaultCheck5">
+         BUISSNIES
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" formControlName="fc" id="defaultCheck6">
+        <label class="form-check-label" for="defaultCheck6">
+          fIRST
+        </label>
+      </div>
+      <p class="thick">Sort:</p>
+      <div class="row"> 
+        <select class="form-control" formControlName="sortic" id="mk">
+          <option [value]="'pricelow'">Lower Price</option>
+          <option [value]="'priceup'"> Upper Price</option>
+        </select>
+      </div>
+      <p class="thick">Carry Bags:</p>
+      <div class="row"> 
+          <input class="form-control" formControlName="cb" type="text" id="cb">
+      </div>
+      <p class="thick">Check Bags:</p>
+      <div class="row"> 
+          <input class="form-control" type="text" formControlName="ccb" id="ccb">
+      </div>
+    </form>
+    </div>
+
+    </div>
+    <div class="col-8">
+      <h2 style="color:dodgerblue" class="text-left mb-3">Flights</h2>
+      <ul class="list-group" style="margin-bottom: 20px;">
+        <li *ngFor="let item of flights" class="list-group-item">
+          <div class="row">
+            <div style="margin-top: 30px;margin-left: 25px" class="col-1">
+              <i class="fas fa-plane"></i>
+              <p class="thick">{{item.company}}</p>
+            </div>
+            <div class="separator">
+            </div>
+            <div class="col-2">
+              <p class="thick">FROM:</p>
+              {{item.flight.startDestination.location.adress}}
+              <p class="thick">TO:</p>
+              {{item.flight.endDestination.location.adress}}
+            </div>
+            <div class="separator">
+            </div>
+            <div class="col-3">
+              <p class="thick">TAKE OFF:</p>
+              {{item.flight.startDestination.takeOff | date:'medium'}}
+              <p class="thick">LANDING:</p>
+              {{item.flight.endDestination.takeOff | date:'medium'}}
+            </div>
+            <div class="separator">
+            </div>
+            <div class="col-2">
+              <p class="thick">Flight stops:</p>
+              {{item.flight.flightStop.length}}
+            </div>
+            <div class="separator">
+            </div>
+            <div class="col-2">
+              <p class="thick"> Travel time:</p> {{item.flight.travelTime}}
+
+              <p class="thick"> Travel distance:</p> {{item.flight.travelDistance}}
+            </div>
+            <div class="separator">
+            </div>
+            <div style="text-align: center;margin-left: 20px;margin-top: 25px" class="col-1">
+              <button type="button" class="btn btn-outline-success" (click)="Reserve(item.flight)">Book
+              </button>
+              <p>{{item.flight.priceForTicket}}$</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>

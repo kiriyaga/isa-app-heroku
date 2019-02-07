@@ -1,0 +1,26 @@
+form {
+    border: 3px solid #f1f1f1;
+    margin-left: 30%;
+    margin-top: 30px;
+    text-align: center;
+}
+  
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+  
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+  
+.container {
+    padding: 16px;
+}
+  
+input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+    border-color: #d0d7e1;
+}

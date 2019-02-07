@@ -1,0 +1,860 @@
+<!-- Tabs -->
+<section id="tabs">
+  <div class="container">
+    <br>
+    <h6 class="section-title h3">{{company.name}} Basic Info</h6>
+    <br>
+    <div class="row">
+      <div class="col-md-5 ">
+        <nav>
+          <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+              aria-controls="nav-home" aria-selected="true">Basic Informations</a>
+            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+              aria-controls="nav-profile" aria-selected="false">Rooms</a>
+            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+              aria-controls="nav-contact" aria-selected="false">Graphs</a>
+            <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab"
+              aria-controls="nav-about" aria-selected="false">About</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+      <!-- BASIC INFORMATIONS -->
+      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <p>Rate: {{rate}}/5</p>
+        <div class="col-md-8">
+          <div class="tab-content">
+            <form class="form" [formGroup]="basicForm" id="basicForm">
+              <div class="form-group row">
+                <label for="ID" class="col-sm-4 col-form-label">ID</label>
+                <div class="col-sm-8">
+                  <input type="text" readonly class="form-control-plaintext" id="id" formControlName="id">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="name" class="col-sm-4 col-form-label">Name</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="name" placeholder="Name" formControlName="name" [ngClass]="{'is-invalid':basicForm.get('name').touched && basicForm.get('name').invalid}"
+                    required>
+                  <div *ngIf="basicForm.get('name').touched && basicForm.get('name').invalid" class="invalid-feedback">
+                    <div>Name is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="promotiveDescription" class="col-sm-4 col-form-label">Promotive Description</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="promotiveDescription" placeholder="Promotive Description"
+                    formControlName="promotiveDescription" [ngClass]="{'is-invalid':basicForm.get('promotiveDescription').touched && basicForm.get('promotiveDescription').invalid}"
+                    required>
+                  <div *ngIf="basicForm.get('promotiveDescription').touched && basicForm.get('promotiveDescription').invalid"
+                    class="invalid-feedback">
+                    <div>Promotive description is required</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <button type="button" class="btn btn-primary" [disabled]="!basicForm.valid" (click)="EditBasic()">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <br>
+        <br>
+        <!--TABELA ZA LOKACIJU HOTELA -->
+        <div class="container">
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="card" style="width: 35rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">{{company.location.adress}}, {{company.location.code}}</h5>
+                      <agm-map [latitude]="company.location.lat" [longitude]="company.location.lng">
+                        <agm-marker [latitude]="company.location.lat" [longitude]="company.location.lng"></agm-marker>
+                      </agm-map>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <button type="button" class="btn btn-outline-warning" data-toggle="modal" (click)="EditLocationModal(company.location)"
+                    data-target="#exampleModal1">Edit</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <br>
+        <br>
+      </div>
+      <!-- SOBE -->
+      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <br>
+        <h6 class="section-title h3">{{company.name}} Rooms</h6>
+        <br>
+        <!-- TABELA ZA SOBE -->
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Floor</th>
+              <th scope="col">Number</th>
+              <th scope="col">Beds</th>
+              <th scope="col">Average price</th>
+              <th scope="col">Rate</th>
+              <th scope="col">Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let room of company.rooms; let i = index">
+              <td *ngIf="room.fastReserve == 1" style="color: chartreuse">{{room.id}}</td>
+              <td *ngIf="room.fastReserve == 0">{{room.id}}</td>
+              <td>{{room.floor}}</td>
+              <td>{{room.number}}</td>
+              <td>{{room.numberOfBeds}}</td>
+              <td>{{(room.nextMonthPrice + room.nextThreeMonthPrice + room.nextHalfYearPrice) / 3}}</td>
+              <td>
+                <div *ngIf="room.rateCount > 0">
+                  {{room.rate/room.rateCount}}/10
+                </div>
+                <div *ngIf="room.rateCount == 0">
+                  Not rated
+                </div>
+              </td>
+              <td>
+                <button type="button" class="btn btn-outline-danger" style="margin-right: 10px" (click)="DeleteRoom(room, room.id)">Delete</button>
+                <button type="button" class="btn btn-outline-warning" data-toggle="modal" (click)="editRoomModal(room, room.id)"
+                  data-target="#editRoomModal">Edit</button>
+                <button type="button" class="btn btn-outline-secondary" *ngIf="room.fastReserve == 1" style="margin-left: 10px"
+                  data-toggle="modal" (click)="fastRoomReservationConfig(room.id)" data-target="#fastRoomReservationConfigModal">FR
+                  config</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <button type="button" class="btn btn-success" style="margin-right: 20px" data-toggle="modal" data-target="#addRoomModal">Add</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAdditionalServicesModal"
+          (click)="showHotelAdditionalServices()">Choose
+          Additional Services</button>
+        <br>
+        <br>
+      </div>
+      <!-- GRAPHS -->
+      <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <fusioncharts width="500" height="300" type="column2d" dataFormat="json" [dataSource]="data">
+        </fusioncharts>
+      </div>
+      <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam.
+        Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure
+        adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet
+        duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit
+        sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis
+        occaecat ex.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!--MODALS FOR FAST ROOM RESERVATION *CONFIG*-->
+<div class="modal fade" id="fastRoomReservationConfigModal" tabindex="-1" role="dialog" aria-labelledby="fastRoomReservationConfigModal"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel3">Fast reservation config</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="roomFastReservationConfigForm" id="roomFastReservationConfigForm">
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <h5 for="services" class="col-sm-6 col-form-label" style="text-align: center; font-weight: bolder">Room
+                ID
+                :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{frRoomId}}</h5>
+              <div class="col-sm-3"></div>
+            </div>
+            <div class="form-group row">
+              <label for="checkInDate" class="col-sm-5 col-form-label" style="margin-top: 20px;">Check in date</label>
+              <div class="col-5">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker1" class="form-control" id="checkInDate" formControlName="checkInDate"
+                    placeholder="Check in date" [ngClass]="{'is-invalid':roomFastReservationConfigForm.get('checkInDate').touched 
+                          && roomFastReservationConfigForm.get('checkInDate').invalid}"
+                    required>
+                  <div *ngIf="roomFastReservationConfigForm.get('checkInDate').touched 
+                          && roomFastReservationConfigForm.get('checkInDate').invalid"
+                    class="invalid-feedback">
+                    <div>Check in date is required</div>
+                  </div>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="checkOutDate" class="col-sm-5 col-form-label" style="margin-top: 20px;">Check out date</label>
+              <div class="col-5">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker2" class="form-control" id="checkOutDate" formControlName="checkOutDate"
+                    placeholder="Check out date" [ngClass]="{'is-invalid':roomFastReservationConfigForm.get('checkOutDate').touched 
+                        && roomFastReservationConfigForm.get('checkOutDate').invalid}"
+                    required>
+                  <div *ngIf="roomFastReservationConfigForm.get('checkOutDate').touched 
+                        && roomFastReservationConfigForm.get('checkOutDate').invalid"
+                    class="invalid-feedback">
+                    <div>Check out date is required</div>
+                  </div>
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <h5 for="services" class="col-sm-6 col-form-label" style="text-align: center; font-weight: bolder">Hotel
+                services included</h5>
+              <div class="col-sm-3"></div>
+            </div>
+            <div class="form-group row" *ngIf="frTransportFromAirportBool == true">
+              <div class="col-sm-3"></div>
+              <label for="transportFromAirport" class="col-sm-5 col-form-label">Transport from airport</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="transportFromAirport" formControlName="transportFromAirport">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="frTransportToAirportBool == true">
+              <div class="col-sm-3"></div>
+              <label for="transportToAirport" class="col-sm-5 col-form-label">Transport to airport</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="transportToAirport" formControlName="transportToAirport">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="frParkingBool == true">
+              <div class="col-sm-3"></div>
+              <label for="parking" class="col-sm-5 col-form-label">Parking</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="parking" formControlName="parking">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="frSwimmingPoolBool == true">
+              <div class="col-sm-3"></div>
+              <label for="swimmingPool" class="col-sm-5 col-form-label">Swimming pool</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="swimmingPool" formControlName="swimmingPool">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="frRestaurantBool == true">
+              <div class="col-sm-3"></div>
+              <label for="restaurant" class="col-sm-5 col-form-label">Restaurant</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="restaurant" formControlName="restaurant">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="frRoomServiceBool == true">
+              <div class="col-sm-3"></div>
+              <label for="roomService" class="col-sm-5 col-form-label">Room service</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="roomService" formControlName="roomService">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="frWellnessBool == true">
+              <div class="col-sm-3"></div>
+              <label for="wellness" class="col-sm-5 col-form-label">Wellness</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="wellness" formControlName="wellness">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="frSpaCenterBool == true">
+              <div class="col-sm-3"></div>
+              <label for="spaCenter" class="col-sm-5 col-form-label">Spa center</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="spaCenter" formControlName="spaCenter">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="frWifiBool == true">
+              <div class="col-sm-3"></div>
+              <label for="wifi" class="col-sm-5 col-form-label">Wi-Fi</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="wifi" formControlName="wifi">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addRoomFastReservation()">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODALS FOR HOTEL ADDITIONAL SERVICES-->
+<div class="modal fade" id="addAdditionalServicesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel3">Additional Services Chooser</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="addAdditionalServicesForm" id="addAdditionalServicesForm">
+            <div class="form-group row">
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="transportFromAirport" (change)="changeCheckBox($event)"
+                        formControlName="transportFromAirport">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="transportFromAirport" class="col-sm-5 col-form-label">Transport from airport</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="transportFromAirportPrice" placeholder="Service price"
+                  formControlName="transportFromAirportPrice" [ngClass]="{'is-invalid':addAdditionalServicesForm.get('transportFromAirportPrice').touched && addAdditionalServicesForm.get('transportFromAirportPrice').invalid}"
+                  required>
+                <div *ngIf="addAdditionalServicesForm.get('transportFromAirportPrice').touched && addAdditionalServicesForm.get('transportFromAirportPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Service price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="transportToAirport" (change)="changeCheckBox($event)" formControlName="transportToAirport">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="transportToAirport" class="col-sm-5 col-form-label">Transport to airport</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="transportToAirportPrice" placeholder="Service price"
+                  formControlName="transportToAirportPrice" [ngClass]="{'is-invalid':addAdditionalServicesForm.get('transportToAirportPrice').touched && addAdditionalServicesForm.get('transportToAirportPrice').invalid}"
+                  required>
+                <div *ngIf="addAdditionalServicesForm.get('transportToAirportPrice').touched && addAdditionalServicesForm.get('transportToAirportPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Service price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="parking" (change)="changeCheckBox($event)" formControlName="parking">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="parking" class="col-sm-5 col-form-label">Parking</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="parkingPrice" placeholder="Service price" formControlName="parkingPrice"
+                  [ngClass]="{'is-invalid':addAdditionalServicesForm.get('parkingPrice').touched && addAdditionalServicesForm.get('parkingPrice').invalid}"
+                  required>
+                <div *ngIf="addAdditionalServicesForm.get('parkingPrice').touched && addAdditionalServicesForm.get('parkingPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Service price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="swimmingPool" (change)="changeCheckBox($event)" formControlName="swimmingPool">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="swimmingPool" class="col-sm-5 col-form-label">Swimming pool</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="swimmingPoolPrice" placeholder="Service price"
+                  formControlName="swimmingPoolPrice" [ngClass]="{'is-invalid':addAdditionalServicesForm.get('swimmingPoolPrice').touched && addAdditionalServicesForm.get('swimmingPoolPrice').invalid}"
+                  required>
+                <div *ngIf="addAdditionalServicesForm.get('swimmingPoolPrice').touched && addAdditionalServicesForm.get('swimmingPoolPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Service price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="restaurant" (change)="changeCheckBox($event)" formControlName="restaurant">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="restaurant" class="col-sm-5 col-form-label">Restaurant</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="restaurantPrice" placeholder="Service price"
+                  formControlName="restaurantPrice" [ngClass]="{'is-invalid':addAdditionalServicesForm.get('restaurantPrice').touched && addAdditionalServicesForm.get('restaurantPrice').invalid}"
+                  required>
+                <div *ngIf="addAdditionalServicesForm.get('restaurantPrice').touched && addAdditionalServicesForm.get('restaurantPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Service price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="roomService" (change)="changeCheckBox($event)" formControlName="roomService">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="roomService" class="col-sm-5 col-form-label">Room service</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="roomServicePrice" placeholder="Service price"
+                  formControlName="roomServicePrice" [ngClass]="{'is-invalid':addAdditionalServicesForm.get('roomServicePrice').touched && addAdditionalServicesForm.get('roomServicePrice').invalid}"
+                  required>
+                <div *ngIf="addAdditionalServicesForm.get('roomServicePrice').touched && addAdditionalServicesForm.get('roomServicePrice').invalid"
+                  class="invalid-feedback">
+                  <div>Service price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="wellness" (change)="changeCheckBox($event)" formControlName="wellness">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="wellness" class="col-sm-5 col-form-label">Wellness</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="wellnessPrice" placeholder="Service price" formControlName="wellnessPrice"
+                  [ngClass]="{'is-invalid':addAdditionalServicesForm.get('wellnessPrice').touched && addAdditionalServicesForm.get('wellnessPrice').invalid}"
+                  required>
+                <div *ngIf="addAdditionalServicesForm.get('wellnessPrice').touched && addAdditionalServicesForm.get('wellnessPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Service price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="spaCenter" (change)="changeCheckBox($event)" formControlName="spaCenter">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="spaCenter" class="col-sm-5 col-form-label">Spa center</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="spaCenterPrice" placeholder="Service price" formControlName="spaCenterPrice"
+                  [ngClass]="{'is-invalid':addAdditionalServicesForm.get('spaCenterPrice').touched && addAdditionalServicesForm.get('spaCenterPrice').invalid}"
+                  required>
+                <div *ngIf="addAdditionalServicesForm.get('spaCenterPrice').touched && addAdditionalServicesForm.get('spaCenterPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Service price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="wifi" (change)="changeCheckBox($event)" formControlName="wifi">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <label for="wifi" class="col-sm-5 col-form-label">Wi-Fi</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="wifiPrice" placeholder="Service price" formControlName="wifiPrice"
+                  [ngClass]="{'is-invalid':addAdditionalServicesForm.get('wifiPrice').touched && addAdditionalServicesForm.get('wifiPrice').invalid}"
+                  required>
+                <div *ngIf="addAdditionalServicesForm.get('wifiPrice').touched && addAdditionalServicesForm.get('wifiPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Service price is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!addAdditionalServicesForm.valid"
+            (click)="updateAdditionalServices()">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODALS FOR ROOMS *EDIT*-->
+<div class="modal fade" id="editRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel3">Edit room</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="editRoomForm" id="editRoomForm">
+            <div class="form-group row">
+              <label for="roomFloor" class="col-sm-5 col-form-label">Room floor</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="floor" placeholder="Floor of the room" formControlName="floor"
+                  [ngClass]="{'is-invalid':editRoomForm.get('floor').touched && editRoomForm.get('floor').invalid}"
+                  required>
+                <div *ngIf="editRoomForm.get('floor').touched && editRoomForm.get('floor').invalid" class="invalid-feedback">
+                  <div>Room floor is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Number of room</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="number" placeholder="Number of room" formControlName="number"
+                  [ngClass]="{'is-invalid':editRoomForm.get('number').touched && editRoomForm.get('number').invalid}"
+                  required>
+                <div *ngIf="editRoomForm.get('number').touched && editRoomForm.get('number').invalid" class="invalid-feedback">
+                  <div>Number of room is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Number of beds</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="numberOfBeds" placeholder="Number of beds in room"
+                  formControlName="numberOfBeds" [ngClass]="{'is-invalid':editRoomForm.get('numberOfBeds').touched && editRoomForm.get('numberOfBeds').invalid}"
+                  required>
+                <div *ngIf="editRoomForm.get('numberOfBeds').touched && editRoomForm.get('numberOfBeds').invalid" class="invalid-feedback">
+                  <div>Number of beds is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="springPrice" class="col-sm-5 col-form-label">Next month price</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="nextMonthPrice" placeholder="1 day rent price"
+                  formControlName="nextMonthPrice" [ngClass]="{'is-invalid':editRoomForm.get('nextMonthPrice').touched && editRoomForm.get('nextMonthPrice').invalid}"
+                  required>
+                <div *ngIf="editRoomForm.get('nextMonthPrice').touched && editRoomForm.get('nextMonthPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Next 3-month price</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="nextThreeMonthPrice" placeholder="1-day rent price"
+                  formControlName="nextThreeMonthPrice" [ngClass]="{'is-invalid':editRoomForm.get('nextThreeMonthPrice').touched 
+                  && editRoomForm.get('nextThreeMonthPrice').invalid}"
+                  required>
+                <div *ngIf="editRoomForm.get('nextThreeMonthPrice').touched && editRoomForm.get('nextThreeMonthPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Next 6-month price</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="nextHalfYearPrice" placeholder="1-day rent price"
+                  formControlName="nextHalfYearPrice" [ngClass]="{'is-invalid':editRoomForm.get('nextHalfYearPrice').touched 
+                  && editRoomForm.get('nextHalfYearPrice').invalid}"
+                  required>
+                <div *ngIf="editRoomForm.get('nextHalfYearPrice').touched && editRoomForm.get('nextHalfYearPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="fastReserve" class="col-sm-5 col-form-label">Fast reserve</label>
+              <div class="col-sm-7">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="fastReserve" formControlName="fastReserve">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="!editRoomForm.valid" data-dismiss="modal" (click)="EditRoom()">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODALS FOR ROOMS *ADD*-->
+<div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel3">Add room</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="addRoomForm" id="addRoomForm">
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Room floor</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="floor" placeholder="Floor of the room" formControlName="floor"
+                  [ngClass]="{'is-invalid':addRoomForm.get('floor').touched && addRoomForm.get('floor').invalid}"
+                  required>
+                <div *ngIf="addRoomForm.get('floor').touched && addRoomForm.get('floor').invalid" class="invalid-feedback">
+                  <div>Room floor is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Number of room</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="number" placeholder="Number of room" formControlName="number"
+                  [ngClass]="{'is-invalid':addRoomForm.get('number').touched && addRoomForm.get('number').invalid}"
+                  required>
+                <div *ngIf="addRoomForm.get('number').touched && addRoomForm.get('number').invalid" class="invalid-feedback">
+                  <div>Number of room is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Number of beds</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="numberOfBeds" placeholder="Number of beds in room"
+                  formControlName="numberOfBeds" [ngClass]="{'is-invalid':addRoomForm.get('numberOfBeds').touched && addRoomForm.get('numberOfBeds').invalid}"
+                  required>
+                <div *ngIf="addRoomForm.get('numberOfBeds').touched && addRoomForm.get('numberOfBeds').invalid" class="invalid-feedback">
+                  <div>Number of beds is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Next month price</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="nextMonthPrice" placeholder="1-day rent price"
+                  formControlName="nextMonthPrice" [ngClass]="{'is-invalid':addRoomForm.get('nextMonthPrice').touched 
+                  && addRoomForm.get('nextMonthPrice').invalid}"
+                  required>
+                <div *ngIf="addRoomForm.get('nextMonthPrice').touched && addRoomForm.get('nextMonthPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Next 3-month price</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="nextThreeMonthPrice" placeholder="1-day rent price"
+                  formControlName="nextThreeMonthPrice" [ngClass]="{'is-invalid':addRoomForm.get('nextThreeMonthPrice').touched 
+                  && addRoomForm.get('nextThreeMonthPrice').invalid}"
+                  required>
+                <div *ngIf="addRoomForm.get('nextThreeMonthPrice').touched && addRoomForm.get('nextThreeMonthPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="numberseats" class="col-sm-5 col-form-label">Next 6-month price</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="nextHalfYearPrice" placeholder="1-day rent price"
+                  formControlName="nextHalfYearPrice" [ngClass]="{'is-invalid':addRoomForm.get('nextHalfYearPrice').touched 
+                  && addRoomForm.get('nextHalfYearPrice').invalid}"
+                  required>
+                <div *ngIf="addRoomForm.get('nextHalfYearPrice').touched && addRoomForm.get('nextHalfYearPrice').invalid"
+                  class="invalid-feedback">
+                  <div>Price is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="fastReserve" class="col-sm-5 col-form-label">Fast reserve</label>
+              <div class="col-sm-1">
+                <table>
+                  <tr>
+                    <td style="padding: 8px;">
+                      <input type="checkbox" id="fastReserve" formControlName="fastReserve">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="!addRoomForm.valid" data-dismiss="modal" (click)="AddRoom()">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODAL FOR COMPANY LOCATION *EDIT*-->
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">Edit location</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="editDestForm" id="editDestForm">
+            <div class="form-group row">
+              <label for="code" class="col-sm-4 col-form-label">Code</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="code" placeholder="Code" formControlName="code" [ngClass]="{'is-invalid':editDestForm.get('code').touched && editDestForm.get('code').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('code').touched && editDestForm.get('code').invalid" class="invalid-feedback">
+                  <div>Code is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="adress" class="col-sm-4 col-form-label">Adress</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="name" placeholder="Adress" formControlName="adress"
+                  [ngClass]="{'is-invalid':editDestForm.get('adress').touched && editDestForm.get('adress').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('adress').touched && editDestForm.get('adress').invalid" class="invalid-feedback">
+                  <div>Adress is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Latitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lat" placeholder="lat" formControlName="lat" [ngClass]="{'is-invalid':editDestForm.get('lat').touched && editDestForm.get('lat').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('lat').touched && editDestForm.get('lat').invalid" class="invalid-feedback">
+                  <div>Latitude is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Longitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lng" placeholder="lng" formControlName="lng" [ngClass]="{'is-invalid':editDestForm.get('lng').touched && editDestForm.get('lng').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('lng').touched && editDestForm.get('lng').invalid" class="invalid-feedback">
+                  <div>Longitude is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="!editDestForm.valid" data-dismiss="modal" (click)="EditLocation()">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

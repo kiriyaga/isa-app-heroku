@@ -1,0 +1,109 @@
+<!--NASLOV-->
+<h2 class="text-center">FRIENDS</h2>
+<!--NASLOV-->
+<br>
+<!--SADRZAJ-->
+<div class="container">
+  <!--SEARCH FOR FRIENDS-->
+  <div class="col align-self-center">
+    <form  class="form" [formGroup]="search" id="search">
+    <div class="input-group form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="material-icons">search</i></span>
+      </div>
+      <input type="text" class="form-control" formControlName="input" placeholder="SEARCH FOR FRIENDS" id="search-value">
+    </div>
+    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModal" (click)="Search()">Search
+      </button>
+      </form>
+  </div>
+  <!--SEARCH FOR FRIENDS-->
+  <!--FRIENDS LIST - PENDING-->
+  <div *ngIf="pendingFriends">
+    <ul class="widget-users row">
+      <li *ngFor="let item of pendingFriends" class="col-md-3">
+        <div class="img">
+          <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="picture1">
+        </div>
+        <div class="details">
+          <div class="name">
+            <a href="#">{{item.friendTwo.name}} {{item.friendTwo.lastName}}</a>
+          </div>
+          <div class="username">
+            @{{item.friendTwo.username}}
+          </div>
+          <div class="type">
+            <span class="badge badge-warning">Pending</span>
+            <div id="yesNo">
+              <a><i class="material-icons" (click)="Accept(item)" *ngIf="item.owner.username!=user.username" style="color: green">check_circle</i></a>
+              <a><i class="material-icons" (click)="Deny(item)"style="color: red">cancel</i></a>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!--FRIENDS LIST - CURRENT-->
+  <div *ngIf="currentFriends">
+    <ul class="widget-users row">
+      <li *ngFor="let item of currentFriends" class="col-md-3" >
+        <div class="img">
+          <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="picture1">
+        </div>
+        <div class="details">
+          <div class="name">
+            <a>{{item.friendTwo.name}} {{item.friendTwo.lastName}}</a>
+          </div>
+          <div class="username">
+            @{{item.friendTwo.username}}
+          </div>
+          <div class="type">
+            <span class="badge badge-success">Accepted</span>
+            <div id="No">
+              <a><i class="material-icons" (click)="Deny(item)" style="color: red">cancel</i></a>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!--FRIENDS LIST - CURRENT-->
+</div>
+<!--SADRZAJ-->
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add friends</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content">
+              <ul class="widget-users row">
+                  <li *ngFor="let item of searchUsers" class="col-md-3">
+                    <div class="img">
+                      <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="picture1">
+                    </div>
+                    <div class="details">
+                      <div class="name">
+                        <a href="#">{{item.name}} {{item.lastName}}</a>
+                        <a><i class="material-icons" (click)="AddFriend(item)" style="color: green">check_circle</i></a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  

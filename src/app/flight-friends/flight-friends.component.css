@@ -1,0 +1,79 @@
+input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+    border-color: #d0d7e1;
+}
+
+.widget-users {
+    list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.widget-users li {
+	border-bottom: 1px solid #ebebeb;
+	padding: 15px 0;
+	height: 110px;
+}
+
+.widget-users li > .img {
+	float: left;
+    margin-top: 8px;
+    margin-right: 8px;
+	width: 60px;
+	height: 60px;
+	overflow: hidden;
+	border-radius: 40%;
+}
+
+.widget-users li > .details {
+	margin-left: 60px;
+}
+
+.widget-users li > .details > .name {
+	font-weight: 600;
+}
+
+.widget-users li > .details > .name > a {
+	color: #344644;
+}
+.innerContainer {
+    color: #000;
+    text-align: center;
+}
+.movie {
+    margin: 10px -5px 10px -5px;
+    height: 70px;
+    background: hsla(240, 1%, 27%, 0.65);   
+}
+.movieDetails {
+    font-size: 15px;
+    margin-top: 3px;
+}
+.movieTitle {
+    font-size: 20px;
+    padding-top: 10px;
+    margin-top: 3px;
+}
+
+.widget-users li > .details > .name > a:hover {
+	color: #2bb6a3;
+}
+
+.widget-users li > .details > .time {
+	color: #2bb6a3;
+	font-size: 0.75em;
+	padding-bottom: 7px;
+}
+
+.widget-users li > .details > .time.online {
+	color: #8dc859;
+}
+
+#yesNo {
+	margin: -55px 140px;
+}
+
+#No {
+	margin: -45px 140px;
+}
