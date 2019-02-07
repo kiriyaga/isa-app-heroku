@@ -10,7 +10,7 @@
         <br>
         <div [formGroup]="orderForm">
         <div formArrayName="items"
-        *ngFor="let item of formData.controls; let i = index;">
+        *ngFor="let item of formData['controls']; let i = index;">
         <div [formGroupName]="i">
           Seat code: {{getSeatCode(i)}} , Passenger: {{i+1}}/{{order.seats.length}}
         <div class="row">
