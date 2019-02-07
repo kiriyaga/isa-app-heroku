@@ -125,7 +125,7 @@ export class FlightPassengersComponent implements OnInit {
 	alert("fsafsafsa");
     this.items.push(this.createItem());
   }
-  get formData { return this.orderForm.get('items'); }
+  get formData() { return this.orderForm.get('items'); }
 
 }
 class Book {
