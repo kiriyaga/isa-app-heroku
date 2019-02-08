@@ -1,9 +1,9 @@
 agm-map {
-    height: 300px;
+    height: 150px;
   }
   .banner {
     margin-top: 0px;
-    height: 425px;
+    height: 200px;
     background-image: url("../../assets/images/hotel2.png");
     background-repeat: no-repeat;
   }
@@ -58,4 +58,11 @@ h2 { color: #111; font-family: 'Open Sans', sans-serif; font-size: 30px; font-we
 
   p.thick {
     font-weight: bold;
+  }
+
+  .md-datepicker-calendar-pane{
+    z-index: 1200}
+
+    ::ng-deep .cdk-overlay-container{
+      z-index: 1200 !important;
   }

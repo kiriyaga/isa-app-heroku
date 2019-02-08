@@ -122,7 +122,7 @@ export class FlightSearchComponent implements OnInit {
       
     });
         if(this.searchForm.get('sortic').value == 'pricelow'){
-          alert('dsa');
+
         temp.sort((a,b)=>a.flight.priceForTicket - b.flight.priceForTicket);
         var temp2 = new Set<FlightsModule>();
 
@@ -246,12 +246,12 @@ export class FlightSearchComponent implements OnInit {
 
     this.avioService.searchFlights(this.type, num, classs, from, to, takeoff, this.landing).subscribe(
       data => {
-        alert("dsadas");
+       
         this.flights = data;
         this.flightsCopy = this.flights;
       },
       error => {
-        alert('ds');
+        alert('error');
       }
     )
     this.searchForm.get('ec').setValue(false);

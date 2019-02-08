@@ -75,7 +75,7 @@
                         <div class="col-2">
                             <h5>Flight:</h5>
                         </div>
-                        <div *ngIf="avioOrder!=null" class="col-2">
+                        <div *ngIf="avioOrder!=null" class="col-5">
                             {{avioOrder.flight.startDestination.location.adress}} - {{avioOrder.flight.endDestination.location.adress}}
                         </div>
                         <div *ngIf="avioOrder!=null" class="col-2">
@@ -85,6 +85,34 @@
                             None
                         </div>
                     </div>
+                    <div class="row" >
+                            <div class="col-2">
+                                <h5>Return: </h5>
+                            </div>
+                            <div *ngIf="avioOrderReturn!=null" class="col-5">
+                                {{avioOrderReturn.flight.startDestination.location.adress}} - {{avioOrderReturn.flight.endDestination.location.adress}}
+                            </div>
+                            <div *ngIf="avioOrderReturn!=null" class="col-2">
+                                <a><i class="material-icons" (click)="DeleteReturnFlight()" style="color: red">cancel</i></a>
+                            </div>
+                            <div *ngIf="avioOrderReturn==null" class="col-3">
+                               ONE WAY
+                            </div>
+                        </div>
+                    <div class="row" >
+                            <div class="col-2">
+                                <h5>Hotel:</h5>
+                            </div>
+                            <div *ngIf="hotelOrder!=null" class="col-2">
+                                {{hotelOrder.room.number}}
+                            </div>
+                            <div *ngIf="hotelOrder!=null" class="col-4">
+                                <a><i class="material-icons" (click)="DeleteHotel()" style="color: red">cancel</i></a>
+                            </div>
+                            <div *ngIf="hotelOrder==null" class="col-2">
+                                None
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

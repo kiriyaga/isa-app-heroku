@@ -35,7 +35,7 @@ export class FlightSeatComponent implements OnInit {
             this.landing = new Date(this.route.snapshot.paramMap.get('landing'));
         }
         
-        alert(this.mode);
+    
         if (this.mode != 'rt' && this.mode != 'ow') {
             this.router.navigate(['/avio']);
         }

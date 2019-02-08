@@ -11,8 +11,6 @@ import { LocationModule } from '../avio-company/location/location.module';
 import { FlightModule } from '../avio-company/flight/flight.module';
 
 
-
-
 @Component({
   selector: 'app-avio-company-admin-panel',
   templateUrl: './avio-company-admin-panel.component.html',
@@ -387,7 +385,7 @@ export class AvioCompanyAdminPanelComponent implements OnInit {
     )
   }
 
-  public EditDestination() {
+  public EditDestination(index: number) {
     var location: LocationModule;
     location = this.editDestForm.value;
     location.id = this.idDest;

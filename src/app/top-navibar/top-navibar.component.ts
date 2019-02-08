@@ -5,6 +5,8 @@ import { ToastService } from '../services/toast.service';
 import { UserModule } from '../avio-company/user/user.module';
 import { OrderModule } from '../avio-company/order/order.module';
 import { AvioCompanyService } from '../services/avio-company.service';
+import { HotelCompanyService } from '../services/hotel-company.service';
+import { fromStringWithSourceMap } from 'source-list-map';
 @Component({
   selector: 'app-top-navibar',
   templateUrl: './top-navibar.component.html',
@@ -16,8 +18,10 @@ export class TopNavibarComponent implements OnInit {
   user : UserModule;
   username : string = "";
   avioOrder:OrderModule;
+  hotelOrder:any;
+  avioOrderReturn:OrderModule;
 
-  constructor(private router: Router, private authenticationService: AuthenticationService, private toastService : ToastService,private avioService: AvioCompanyService) {}
+  constructor(private router: Router, private hotelService: HotelCompanyService, private authenticationService: AuthenticationService, private toastService : ToastService,private avioService: AvioCompanyService) {}
 
   ngOnInit() {
     if(this.isLogin) {
@@ -38,8 +42,12 @@ export class TopNavibarComponent implements OnInit {
 
   ShowCart(){
     this.avioOrder = JSON.parse(localStorage.getItem('AvioOrder'));
-    var hotelOrder;
-    var carOrder;
+    this.hotelOrder = JSON.parse(localStorage.getItem('HotelOrder'));
+    this.avioOrderReturn = JSON.parse(localStorage.getItem('AvioOrderReturn'));
+  }
+  DeleteHotel(){
+    localStorage.removeItem('HotelOrder');
+    this.hotelOrder=null;
   }
 
   DeleteFlight(){
@@ -47,17 +55,53 @@ export class TopNavibarComponent implements OnInit {
     this.avioOrder=null;
   }
 
+  DeleteReturnFlight(){
+    localStorage.removeItem('AvioOrderReturn');
+    this.avioOrderReturn=null;
+  }
+
   Reservation(){
+   var  fr = true;
+   var frr=true;
+   var hr = true;
     if(this.avioOrder!=null){
     this.avioService.reserveFlight(this.avioOrder).subscribe(
       data=>{
-        alert(data.message);
+        fr=true;
         localStorage.removeItem('AvioOrder');
       },
       error=>{
         alert("error");
+        fr=false;
       }
     )}
+    if(this.avioOrderReturn!=null){
+      this.avioService.reserveFlight(this.avioOrderReturn).subscribe(
+        data=>{
+          frr=true;
+          localStorage.removeItem('AvioOrderReturn');
+        },
+        error=>{
+          alert("error");
+          frr=false;
+        }
+      )}
+    if(this.hotelOrder!=null){
+    this.hotelService.makeReservation(this.hotelOrder).subscribe(
+      data => {
+       hr=true;
+       localStorage.removeItem('HotelOrder');
+      },
+      error => {
+       alert('error');
+       hr=false;
+      }
+    )
+    }
+    if(fr && hr && frr){
+        alert("Successful reservations!")
+    }
+
   }
 
 }

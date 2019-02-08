@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HotelCompanyService } from '../services/hotel-company.service'
+import { HotelCompanyService } from '../services/hotel-company.service';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../services/authentication.service'
+import { AuthenticationService } from '../services/authentication.service';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { CompanyModule } from '../hotel-company/company/company.module';
 import { LocationModule } from '../avio-company/location/location.module';
 import { RoomModule } from '../hotel-company/room/room.module';
 import { AdditionalServiceModule } from '../hotel-company/additional-services/additional-services.module';
+import { HotelFastReservationModule } from '../hotel-company/hotel-fast-reservation/hotel-fast-reservation.module';
 
 @Component({
   selector: 'app-hotel-company-admin-panel',
@@ -19,11 +20,8 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
   rate: number;
   roomId: any;
   data: Object;
-  frRoomId : number;
-  
-  addRoomFastReservation(){
-	  
-  }
+  frRoom : RoomModule;
+  earnings:number = 0;
 
   // fast-reserve boolean
   frTransportFromAirportBool: boolean;
@@ -46,6 +44,11 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
   spaCenterBool: boolean;
   wifiBool: boolean;
 
+
+  earningsForm = new FormGroup({
+    earnings1: new FormControl(new Date(), Validators.required),
+    earnings2: new FormControl(new Date(), Validators.required),
+  });
 
   basicForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -135,8 +138,22 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
     )
   }
 
+  GetEarning(){
 
-  private getGraph() {
+    this.hotelService.getEarnings(this.company.id,this.earningsForm.get('earnings1').value,this.earningsForm.get('earnings2').value).subscribe(
+
+      data=>{
+        this.earnings = data;
+      },
+      error=>{
+        alert("error");
+      }
+    )
+
+  }
+
+
+  public getGraph() {
     this.hotelService.getGraph(this.company.id).subscribe(
 
       data => {
@@ -155,40 +172,98 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
     )
   }
 
-  public fastRoomReservationConfig(roomId : number) {
+  public addRoomFastReservation() {
+
+    let hotelFastReservation = new HotelFastReservationModule();
+    hotelFastReservation.checkInDate = this.roomFastReservationConfigForm.get('checkInDate').value;
+    hotelFastReservation.checkOutDate = this.roomFastReservationConfigForm.get('checkOutDate').value;
+    hotelFastReservation.room = this.frRoom;
+
+    for (let as of this.company.additionalServices) {
+      if (as.additionalServiceType === "TRANSPORT_FROM_AIRPORT" && this.roomFastReservationConfigForm.get('transportFromAirport').value) {
+        
+        hotelFastReservation.additionalServices.push(as);
+
+      } else if (as.additionalServiceType === "TRANSPORT_TO_AIRPORT" && this.roomFastReservationConfigForm.get('transportToAirport').value) {
+        
+        hotelFastReservation.additionalServices.push(as);
+        
+      } else if (as.additionalServiceType === "PARKING" && this.roomFastReservationConfigForm.get('parking').value) {
+        
+        hotelFastReservation.additionalServices.push(as);
+        
+      } else if (as.additionalServiceType === "SWIMMING_POOL" && this.roomFastReservationConfigForm.get('swimmingPool').value) {
+        
+        hotelFastReservation.additionalServices.push(as);
+        
+      } else if (as.additionalServiceType === "RESTAURANT" && this.roomFastReservationConfigForm.get('restaurant').value) {
+        
+        hotelFastReservation.additionalServices.push(as);
+        
+      } else if (as.additionalServiceType === "ROOM_SERVICE" && this.roomFastReservationConfigForm.get('roomService').value) {
+       
+        hotelFastReservation.additionalServices.push(as);
+        
+      } else if (as.additionalServiceType === "WELLNESS" && this.roomFastReservationConfigForm.get('wellness').value) {
+        
+        hotelFastReservation.additionalServices.push(as);
+        
+      } else if (as.additionalServiceType === "SPA_CENTER" && this.roomFastReservationConfigForm.get('spaCenter').value) {
+        
+        hotelFastReservation.additionalServices.push(as);
+        
+      } else if (as.additionalServiceType === "WIFI" && this.roomFastReservationConfigForm.get('wifi').value) {
+        
+        hotelFastReservation.additionalServices.push(as);
+        
+      }
+
+    }
+
+    this.hotelService.addHotelFastReservation(hotelFastReservation).subscribe(
+      data => {
+        alert(data.message)
+      },
+      error => {
+        this.router.navigate(['/hotels']);
+      }
+    )
+
+  }
+
+  public fastRoomReservationConfig(room : RoomModule) {
     
-    this.frRoomId = roomId;
+    this.frRoom = room;
 
     this.resetFRBoolean();
     for (let as of this.company.additionalServices) {
-      alert(as.additionalServiceType)
       if (as.additionalServiceType === "TRANSPORT_FROM_AIRPORT") {
         this.frTransportFromAirportBool = true;
-        alert("from")
+
       } else if (as.additionalServiceType === "TRANSPORT_TO_AIRPORT") {
         this.frTransportToAirportBool = true;
-        alert("to")
+        
       } else if (as.additionalServiceType === "PARKING") {
         this.frParkingBool = true;
-        alert("parking")
+        
       } else if (as.additionalServiceType === "SWIMMING_POOL") {
         this.frSwimmingPoolBool = true;
-        alert("pool")
+        
       } else if (as.additionalServiceType === "RESTAURANT") {
         this.frRestaurantBool = true;
-        alert("restaurant")
+        
       } else if (as.additionalServiceType === "ROOM_SERVICE") {
         this.frRoomServiceBool = true;
-        alert("room service")
+        
       } else if (as.additionalServiceType === "WELLNESS") {
         this.frWellnessBool = true;
-        alert("wellness")
+        
       } else if (as.additionalServiceType === "SPA_CENTER") {
         this.frSpaCenterBool = true;
-        alert("spa center")
+        
       } else if (as.additionalServiceType === "WIFI") {
         this.frWifiBool = true;
-        alert("wifi")
+        
       }
 
     }
@@ -325,7 +400,7 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
 
   }
 
-  showHotelAdditionalServices() {
+  public showHotelAdditionalServices() {
 
     for (let service of this.company.additionalServices) {
 
@@ -380,16 +455,16 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
     this.disableAllUncheckedServicesPrices();
   }
 
-  changeCheckBox(event: any) {
+  public changeCheckBox(event: any) {
     var checkBoxId = event.currentTarget.id
 
     if (event.target.checked) {
       this.addAdditionalServicesForm.get(checkBoxId + 'Price').enable();
-      alert("cekirano")
+      
     } else {
       this.addAdditionalServicesForm.get(checkBoxId + 'Price').reset();
       this.addAdditionalServicesForm.get(checkBoxId + 'Price').disable();
-      alert("nije cekirano")
+      
     }
   }
 
@@ -408,8 +483,7 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
     room.nextHalfYearPrice = this.editRoomForm.get('nextHalfYearPrice').value;
 
     room.fastReserve = this.editRoomForm.get('fastReserve').value;
-
-    alert("EditRoom, pre slanje servisu - room.fastReserve: " + room.fastReserve);
+    
 
     this.hotelService.EditRoom(this.roomId, room.hotelCompany, room.floor, room.number, room.numberOfBeds, room.nextMonthPrice,
       room.nextThreeMonthPrice, room.nextHalfYearPrice, room.fastReserve).subscribe(
@@ -417,7 +491,7 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
           this.company = data;
           this.rate = this.company.rate / this.company.rateCount;
           this.setCurrentFieldValues();
-          alert('uspesno sam editovao sobu');
+          
         },
         error => {
           this.router.navigate(['/hotel']);
@@ -435,10 +509,10 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
     this.EditNextHalfYearPrice.setValue(room.nextHalfYearPrice);
     this.EditFastReserve.setValue(room.fastReserve);
     this.editRoomForm.controls['fastReserve'].setValue(room.fastReserve);
-    alert("editRoomModal - room.fastReserve: " + room.fastReserve);
+    
   }
 
-  public DeleteRoom(room: RoomModule, roomId: number) {
+  public deleteRoom(room: RoomModule, roomId: number) {
     this.hotelService.DeleteRoom(roomId, this.company).subscribe(
       data => {
         this.company = data;
@@ -506,14 +580,14 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
     )
   }
 
-  private setCurrentFieldValues() {
+  public setCurrentFieldValues() {
 
     this.Name.setValue(this.company.name);
     this.PromtiveDescription.setValue(this.company.promtiveDescription);
     this.Id.setValue(this.company.id);
   }
 
-  private disableAllUncheckedServicesPrices() {
+  public disableAllUncheckedServicesPrices() {
     if (!this.transportFromAirportBool) {
       this.addAdditionalServicesForm.get('transportFromAirportPrice').disable();
     } else {
@@ -570,7 +644,7 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
 
   }
 
-  private resetFRBoolean() {
+  public resetFRBoolean() {
     this.frTransportFromAirportBool = false;
     this.frTransportToAirportBool = false;
     this.frParkingBool = false;
@@ -582,7 +656,7 @@ export class HotelCompanyAdminPanelComponent implements OnInit {
     this.frWifiBool = false;
   }
 
-  private resetAdditionalServicesBools() {
+  public resetAdditionalServicesBools() {
     this.transportFromAirportBool = false;
     this.transportToAirportBool = false;
     this.parkingBool = false;

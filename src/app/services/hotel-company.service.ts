@@ -7,8 +7,10 @@ import { environment } from '../../environments/environment';
 import { LocationModule } from '../avio-company/location/location.module';
 import { CompanyModule } from '../hotel-company/company/company.module';
 import { AdditionalServiceModule } from '../hotel-company/additional-services/additional-services.module';
-import { RoomModule } from '../hotel-company/room/room.module';
 import { RoomReservationModule } from '../hotel-company/room-reservation/room-reservation.module';
+import { HotelFastReservationModule } from '../hotel-company/hotel-fast-reservation/hotel-fast-reservation.module';
+import { UserModule } from '../hotel-company/user/user.module';
+import { HotelFastReservationRoomModule } from '../hotel-company/hotel-fast-reservation-room/hotel-fast-reservation-room.module';
 
 @Injectable({
   providedIn: 'root'
@@ -72,8 +74,7 @@ export class HotelCompanyService {
 
   public EditRoom(id: number, hotelCompany: CompanyModule, floor: number, number: number, numberOfBeds: number,
     nextMonthPrice: number, nextThreeMonthPrice: number, nextHalfYearPrice: number, fastReserve: boolean) {
-
-    alert("iz servisa editRoom: " + fastReserve);
+      
     return this.http.post<any>(environment.apiUrl + '/auth/hotel/EditRoom', {
       id, hotelCompany,
       floor, number, numberOfBeds, nextMonthPrice, nextThreeMonthPrice, nextHalfYearPrice, fastReserve
@@ -93,10 +94,6 @@ export class HotelCompanyService {
   }
 
   public updateAdditionalServices(hotelId: String, additionalServices: Array<AdditionalServiceModule>) {
-
-    for (let asm of additionalServices) {
-      alert(asm.additionalServiceType)
-    }
 
     return this.http.post<any>(environment.apiUrl + '/auth/hotel/UpdateAdditionalServices/' + hotelId, additionalServices
     ).pipe(map(company => {
@@ -122,6 +119,14 @@ export class HotelCompanyService {
     ));
   }
 
+  public numberOfDays(checkInDate: Date, checkOutDate: Date) {
+    return this.http.get<any>(environment.apiUrl + '/public/hotel/numberOfDays/' + checkInDate + '/' + checkOutDate)
+    .pipe(map(numberOfDays => {
+      return numberOfDays;
+    }
+    ));
+  }
+
   
   public makeReservation(roomReservation: RoomReservationModule) {
     return this.http.post<any>(environment.apiUrl + '/public/hotel/makeReservation',  roomReservation
@@ -131,17 +136,37 @@ export class HotelCompanyService {
     ));
   }
 
-  /*
-  public reserveRoom(room: RoomModule) {
-    return this.http.post<any>(environment.apiUrl + '/public/hotel/ReserveRoom', room
-    ).pipe(map(s => {
-      return s;
+  public addHotelFastReservation(hotelFastReservation: HotelFastReservationModule) {
+    return this.http.post<any>(environment.apiUrl + '/auth/hotel/addHotelFastReservation',  hotelFastReservation
+    ).pipe(map(responseMessage => {
+      return responseMessage;
     }
     ));
   }
-  */
 
+  public getFastResevationsForCompany(id: number) {
+    return this.http.get<any>(environment.apiUrl + '/public/hotel/getFastResevationsForCompany/' + id
+    ).pipe(map(fastReservations => {
+      return fastReservations;
+    }
+    ));
+  }
 
+  public reserveFastOffer(owner: UserModule, hfro: HotelFastReservationModule) {
+    return this.http.post<any>(environment.apiUrl + '/public/hotel/reserveFastOffer/', { owner, hfro }
+    ).pipe(map(responseMessage => {
+      return responseMessage;
+    }
+    ));
+  }
+
+  public getEarnings(company: any , earnings1: Date, earnings2: Date) {
+    return this.http.post<any>(environment.apiUrl + '/auth/hotel/getEarnings',{ company, earnings1, earnings2 }
+    ).pipe(map(earnings => {
+      return earnings;
+    }
+    ));
+  }
 
   public getGraph(company: String) {
     return this.http.get<any>(environment.apiUrl + '/auth/hotel/getGraph/' + company

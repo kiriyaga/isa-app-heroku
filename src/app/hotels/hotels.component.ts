@@ -42,7 +42,7 @@ export class HotelsComponent implements OnInit {
       hotelLocation = "null";
     }
 
-    alert("name: " + hotelName + ", address: " + hotelLocation + ", in: " + checkInDate + ", out: " + checkOutDate);
+  
     this.router.navigate(['/hotels/search/'+ hotelName +'/' + hotelLocation+ '/' + checkInDate + '/' + checkOutDate]);
   }
 

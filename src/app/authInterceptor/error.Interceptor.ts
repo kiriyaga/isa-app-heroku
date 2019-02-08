@@ -26,15 +26,11 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (error.error instanceof ErrorEvent) {
             // client-side error
             errorMessage = `${error.error.message}`;
-            alert('client');
-            alert(errorMessage);
-            alert(error.message);
+           
           } else {
             // server-side error
             errorMessage = `${error.error.message}`;
-            alert('server');
-            alert(errorMessage);
-            alert(error.message);
+
           }
           return throwError(errorMessage);
         })

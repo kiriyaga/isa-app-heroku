@@ -1,0 +1,324 @@
+<div class="container">
+  <br>
+  <div class="row">
+    <h4 style="color:dodgerblue" class="text-left mb-3">System admin options</h4>
+  </div>
+  <hr>
+  <div class="row">
+      <h6 style="color: gray" class="text-left mb-3">To add new company admin, you should add company first. To add new company, you should add location first</h6>
+    </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addLocation">Add location</button>
+    </div>
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCompany">Add company</button>
+    </div>
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCompanyAdmin">Add company admin</button>
+    </div>
+    <!--
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSystemAdmin">Add system admin</button>
+    </div>
+    -->
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#setDiscount">Set discounts</button>
+    </div>
+  </div>
+</div>
+
+<!--MODAL FOR COMPANY LOCATION ADD-->
+<div class="modal fade" id="setDiscount" tabindex="-1" role="dialog" aria-labelledby="setDiscount" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">Set premium user discount</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="setDiscountForm" id="setDiscountForm">
+            <div class="form-group row">
+              <label for="code" class="col-sm-4 col-form-label">Code</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="discount" placeholder="DISCOUNT" formControlName="discount"
+                 [ngClass]="{'is-invalid':setDiscountForm.get('discount').touched && setDiscountForm.get('discount').invalid}"
+                  required>
+                <div *ngIf="setDiscountForm.get('discount').touched && setDiscountForm.get('discount').invalid" class="invalid-feedback">
+                  <div>Discount value is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="!setDiscountForm.valid" data-dismiss="modal" (click)="setDiscount()">
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODAL FOR COMPANY LOCATION ADD-->
+<div class="modal fade" id="addLocation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">Add company location</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="editDestForm" id="editDestForm">
+            <div class="form-group row">
+              <label for="code" class="col-sm-4 col-form-label">Code</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="code" placeholder="Code" formControlName="code" [ngClass]="{'is-invalid':editDestForm.get('code').touched && editDestForm.get('code').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('code').touched && editDestForm.get('code').invalid" class="invalid-feedback">
+                  <div>Code is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="adress" class="col-sm-4 col-form-label">Adress</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="name" placeholder="Adress" formControlName="adress"
+                  [ngClass]="{'is-invalid':editDestForm.get('adress').touched && editDestForm.get('adress').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('adress').touched && editDestForm.get('adress').invalid" class="invalid-feedback">
+                  <div>Adress is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Latitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lat" placeholder="lat" formControlName="lat" [ngClass]="{'is-invalid':editDestForm.get('lat').touched && editDestForm.get('lat').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('lat').touched && editDestForm.get('lat').invalid" class="invalid-feedback">
+                  <div>Latitude is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="lat" class="col-sm-4 col-form-label">Longitude</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="lng" placeholder="lng" formControlName="lng" [ngClass]="{'is-invalid':editDestForm.get('lng').touched && editDestForm.get('lng').invalid}"
+                  required>
+                <div *ngIf="editDestForm.get('lng').touched && editDestForm.get('lng').invalid" class="invalid-feedback">
+                  <div>Longitude is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="!editDestForm.valid" data-dismiss="modal" (click)="addLocation()">
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODAL FOR COMPANY ADD-->
+<div class="modal fade" id="addCompany" tabindex="-1" role="dialog" aria-labelledby="addCompany" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">Add company</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="basicForm" id="basicForm">
+            <div class="form-group row">
+              <label for="name" class="col-sm-4 col-form-label">Location ID</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="locationID" placeholder="Location ID"
+                  formControlName="locationID" [ngClass]="{'is-invalid':basicForm.get('locationID').touched && basicForm.get('locationID').invalid}"
+                  required>
+                <div *ngIf="basicForm.get('locationID').touched && basicForm.get('locationID').invalid" class="invalid-feedback">
+                  <div>Location ID is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="name" class="col-sm-4 col-form-label">Name</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="name" placeholder="Name" formControlName="name" [ngClass]="{'is-invalid':basicForm.get('name').touched && basicForm.get('name').invalid}"
+                  required>
+                <div *ngIf="basicForm.get('name').touched && basicForm.get('name').invalid" class="invalid-feedback">
+                  <div>Name is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="name" class="col-sm-4 col-form-label">Type</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="type" placeholder="AVIO/HOTEL/CAR" formControlName="type"
+                 [ngClass]="{'is-invalid':basicForm.get('type').touched && basicForm.get('type').invalid}"
+                  required>
+                <div *ngIf="basicForm.get('type').touched && basicForm.get('type').invalid" class="invalid-feedback">
+                  <div>Name is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="!basicForm.valid" data-dismiss="modal" (click)="addCompany()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODAL FOR COMPANY ADMIN ADD-->
+<div class="modal fade" id="addCompanyAdmin" tabindex="-1" role="dialog" aria-labelledby="addCompanyAdmin" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">Add company admin</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-content">
+          <form class="form" [formGroup]="addCompanyAdminForm" id="addCompanyAdminForm">
+            <!------------------FORM FIELDS---------------------->
+            <div class="form-group row">
+              <label for="name" class="col-sm-4 col-form-label">Company ID</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="companyID" placeholder="Company ID"
+                  formControlName="companyID" [ngClass]="{'is-invalid':addCompanyAdminForm.get('companyID').touched 
+                  && addCompanyAdminForm.get('companyID').invalid}"
+                  required>
+                <div *ngIf="addCompanyAdminForm.get('companyID').touched 
+                && addCompanyAdminForm.get('companyID').invalid" class="invalid-feedback">
+                  <div>Company ID is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">account_circle</i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="FIRST NAME" id="first-name-value"
+                    formControlName="firstName" [ngClass]="{'is-invalid':addCompanyAdminForm.get('firstName').touched && addCompanyAdminForm.get('firstName').invalid}"
+                    required>
+                  <div *ngIf="addCompanyAdminForm.get('firstName').touched && addCompanyAdminForm.get('firstName').invalid"
+                    class="invalid-feedback">
+                    <div *ngIf="addCompanyAdminForm.get('firstName').errors.required">First name is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">account_circle</i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="LAST NAME" id="last-name-value" formControlName="lastName"
+                    [ngClass]="{'is-invalid':addCompanyAdminForm.get('lastName').touched && addCompanyAdminForm.get('lastName').invalid}"
+                    required>
+                  <div *ngIf="addCompanyAdminForm.get('lastName').touched && addCompanyAdminForm.get('lastName').invalid"
+                    class="invalid-feedback">
+                    <div *ngIf="addCompanyAdminForm.get('lastName').errors.required">Last name is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">email</i></span>
+                  </div>
+                  <input type="email" class="form-control" placeholder="EMAIL" id="email-value" formControlName="email"
+                    [ngClass]="{'is-invalid':addCompanyAdminForm.get('email').touched && addCompanyAdminForm.get('email').invalid}"
+                    required>
+                  <div *ngIf="addCompanyAdminForm.get('email').invalid" class="invalid-feedback">
+                    <div *ngIf="addCompanyAdminForm.get('email').touched && addCompanyAdminForm.get('email').errors.required">Email
+                      is
+                      required</div>
+                    <div *ngIf="addCompanyAdminForm.get('email').errors.email">Email must be a valid email address</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">account_circle</i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="USERNAME" id="username-value" formControlName="username"
+                    [ngClass]="{'is-invalid':addCompanyAdminForm.get('username').touched && addCompanyAdminForm.get('username').invalid}"
+                    required>
+                  <div *ngIf="addCompanyAdminForm.get('username').touched && addCompanyAdminForm.get('username').invalid"
+                    class="invalid-feedback">
+                    <div *ngIf="addCompanyAdminForm.get('username').errors.required">Username is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">visibility_off</i></span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="PASSWORD" id="password-value"
+                    formControlName="password" [ngClass]="{'is-invalid':addCompanyAdminForm.get('password').touched && addCompanyAdminForm.get('password').invalid}"
+                    required>
+                  <div *ngIf="addCompanyAdminForm.get('password').touched && addCompanyAdminForm.get('password').invalid"
+                    class="invalid-feedback">
+                    <div *ngIf="addCompanyAdminForm.get('password').errors.required">Password is required</div>
+                    <div *ngIf="addCompanyAdminForm.get('password').errors.minlength">Password must be at least 5
+                      character
+                      long</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons">visibility_off</i></span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="REPASSWORD" id="confirm-password-value"
+                    formControlName="confirmPassword" [ngClass]="{'is-invalid':addCompanyAdminForm.get('confirmPassword').touched && addCompanyAdminForm.get('confirmPassword').invalid}">
+                  <div *ngIf="addCompanyAdminForm.get('confirmPassword').touched && addCompanyAdminForm.get('confirmPassword').invalid"
+                    class="invalid-feedback">
+                    <div *ngIf="addCompanyAdminForm.get('confirmPassword').errors.required">Repassword is
+                      required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!------------------FORM FIELDS---------------------->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="!addCompanyAdminForm.valid" data-dismiss="modal"
+            (click)="addCompanyAdmin()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -28,7 +28,10 @@ export class FlightPassengersComponent implements OnInit {
       this.order.seats[index].checkBagCount=f.controls['checkBag'].value;
       this.order.seats[index].passport = f.controls['passport'].value;
     }
+    let s = JSON.parse(localStorage.getItem('AvioOrder'));
+     if(s==null){
     localStorage.setItem('AvioOrder', JSON.stringify(this.order));
+     }
 
 
     if (this.order.mode == 'rw') {
@@ -36,7 +39,10 @@ export class FlightPassengersComponent implements OnInit {
     }
     else {
       if (this.order.fastReserve == null) {
-        this.router.navigate(['/hotels']);
+          if(s!=null && s.mode != 'rw'){
+            localStorage.setItem('AvioOrderReturn', JSON.stringify(this.order));
+          }
+        this.router.navigate(['/hotels/search/null/'+this.order.flight.endDestination.location.adress+'/'+this.order.flight.endDestination.takeOff+'/'+this.order.flight.endDestination.takeOff]);
       }
       if (this.order.fastReserve == true) {
 
@@ -122,10 +128,9 @@ export class FlightPassengersComponent implements OnInit {
   }
 
   addItem() {
-	alert("fsafsafsa");
+
     this.items.push(this.createItem());
   }
-  get formData() { return this.orderForm.get('items'); }
 
 }
 class Book {

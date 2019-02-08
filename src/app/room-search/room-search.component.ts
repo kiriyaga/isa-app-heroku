@@ -118,8 +118,7 @@ export class RoomSearchComponent implements OnInit {
     this.hotelService.searchRooms(this.hotelName, this.hotelLocation, this.checkInDate, this.checkOutDate).subscribe(
       data => {
         this.searchedRooms = data;
-        alert("uspeo sam")
-        alert(this.searchedRooms.length)
+
       },
       error => {
         this.router.navigate(['/hotels']);
@@ -138,8 +137,7 @@ export class RoomSearchComponent implements OnInit {
     this.hotelService.searchRooms(this.hotelName, this.hotelLocation, this.checkInDate, this.checkOutDate).subscribe(
       data => {
         this.searchedRooms = data;
-        alert("uspeo sam")
-        alert(this.searchedRooms.length)
+
       },
       error => {
         this.router.navigate(['/hotels']);
@@ -162,14 +160,12 @@ export class RoomSearchComponent implements OnInit {
       this.hotelLocation = "null";
     }
 
-    alert("name: " + this.hotelName + ", address: " + this.hotelLocation + ", in: " + this.checkInDate + ", out: " + this.checkOutDate);
+    
 
 
     this.hotelService.searchRooms(this.hotelName, this.hotelLocation, this.checkInDate, this.checkOutDate).subscribe(
       data => {
         this.searchedRooms = data;
-        alert("uspeo sam")
-        alert(this.searchedRooms.length)
       },
       error => {
         this.router.navigate(['/hotels']);
@@ -178,7 +174,6 @@ export class RoomSearchComponent implements OnInit {
   }
 
   public makeReservation() {
-    alert("ovde sam, he-he")
 
     let tempRoomReservation = new RoomReservationModule();
 
@@ -186,71 +181,55 @@ export class RoomSearchComponent implements OnInit {
     tempRoomReservation.checkOutDate = this.checkOutDate;
     tempRoomReservation.room = this.roomToBook.room;
     tempRoomReservation.owner = JSON.parse(localStorage.getItem('sessionUser'));
-
-    alert(tempRoomReservation.owner.authority);
     
     for (let as of this.roomToBook.hotelCompany.additionalServices) {
-      alert(as.additionalServiceType)
-      alert("pojedi ga")
-      alert(this.bookRoomForm.get('transportFromAirport').value)
-      alert(this.bookRoomForm.get('transportToAirport').value)
+
       if (as.additionalServiceType === "TRANSPORT_FROM_AIRPORT" && this.bookRoomForm.get('transportFromAirport').value == true) {
-        alert("FROM postoji i cekiran je pa cu ga dodati u rezervaciju")
+        
         tempRoomReservation.additionalServices.push(as)
 
       } else if (as.additionalServiceType === "TRANSPORT_TO_AIRPORT" && this.bookRoomForm.get('transportToAirport').value == true) {
-        alert("TO postoji i cekiran je pa cu ga dodati u rezervaciju")
+        
         tempRoomReservation.additionalServices.push(as);
 
       } else if (as.additionalServiceType === "PARKING" && this.bookRoomForm.get('parking').value == true) {
-        alert("PARKING postoji i cekiran je pa cu ga dodati u rezervaciju")
+        
         tempRoomReservation.additionalServices.push(as);
 
       } else if (as.additionalServiceType === "SWIMMING_POOL" && this.bookRoomForm.get('swimmingPool').value == true) {
-        alert("SWIMMING POOL postoji i cekiran je pa cu ga dodati u rezervaciju")
+        
         tempRoomReservation.additionalServices.push(as);
 
       } else if (as.additionalServiceType === "RESTAURANT" && this.bookRoomForm.get('restaurant').value == true) {
-        alert("RESTAURANT postoji i cekiran je pa cu ga dodati u rezervaciju")
+        
         tempRoomReservation.additionalServices.push(as);
 
       } else if (as.additionalServiceType === "ROOM_SERVICE" && this.bookRoomForm.get('roomService').value == true) {
-        alert("ROOM SERVICE postoji i cekiran je pa cu ga dodati u rezervaciju")
+        
         tempRoomReservation.additionalServices.push(as);
 
       } else if (as.additionalServiceType === "WELLNESS" && this.bookRoomForm.get('wellness').value == true) {
-        alert("WELLNESS postoji i cekiran je pa cu ga dodati u rezervaciju")
+        
         tempRoomReservation.additionalServices.push(as);
 
       } else if (as.additionalServiceType === "SPA_CENTER" && this.bookRoomForm.get('spaCenter').value == true) {
-        alert("SPA CENTER postoji i cekiran je pa cu ga dodati u rezervaciju")
+        
         tempRoomReservation.additionalServices.push(as);
 
       } else if (as.additionalServiceType === "WIFI" && this.bookRoomForm.get('wifi').value == true) {
-        alert("WIFI postoji i cekiran je pa cu ga dodati u rezervaciju")
+        
         tempRoomReservation.additionalServices.push(as);
 
       } 
 
     }
 
-    alert(tempRoomReservation.additionalServices.length)
-    alert("van fora")
-    
-    this.hotelService.makeReservation(tempRoomReservation).subscribe(
-      data => {
-        alert(data.message)
-      },
-      error => {
-        this.router.navigate(['/hotels']);
-      }
-    )
-
+    localStorage.setItem('HotelOrder', JSON.stringify(tempRoomReservation));
   }
 
   public bookRoom(item: SearchedRoomModule) {
     this.resetFields();
-    alert("uspesno resetovana polja - cekirano i da li servisi postoje")
+    
 
     // zapamti o kojoj sobi je rec
     this.roomToBook = item;
@@ -273,50 +252,41 @@ export class RoomSearchComponent implements OnInit {
     )
 
     for (let as of item.hotelCompany.additionalServices) {
-      alert(as.additionalServiceType)
+      
       if (as.additionalServiceType === "TRANSPORT_FROM_AIRPORT") {
         this.transportFromAirportBool = true;
-        alert("from")
         this.transportFromAirportPrice = as.price;
 
       } else if (as.additionalServiceType === "TRANSPORT_TO_AIRPORT") {
         this.transportToAirportBool = true;
-        alert("to")
         this.transportToAirportPrice = as.price;
 
       } else if (as.additionalServiceType === "PARKING") {
         this.parkingBool = true;
-        alert("parking")
         this.parkingPrice = as.price;
 
       } else if (as.additionalServiceType === "SWIMMING_POOL") {
         this.swimmingPoolBool = true;
-        alert("pool")
         this.swimmingPoolPrice = as.price;
 
       } else if (as.additionalServiceType === "RESTAURANT") {
         this.restaurantBool = true;
-        alert("restaurant")
         this.restaurantPrice = as.price;
 
       } else if (as.additionalServiceType === "ROOM_SERVICE") {
         this.roomServiceBool = true;
-        alert("room service")
         this.roomServicePrice = as.price;
 
       } else if (as.additionalServiceType === "WELLNESS") {
         this.wellnessBool = true;
-        alert("wellness")
         this.wellnessPrice = as.price;
 
       } else if (as.additionalServiceType === "SPA_CENTER") {
         this.spaCenterBool = true;
-        alert("spa center")
         this.spaCenterPrice = as.price;
 
       } else if (as.additionalServiceType === "WIFI") {
         this.wifiBool = true;
-        alert("wifi")
         this.wifiPrice = as.price;
 
       }
@@ -324,36 +294,26 @@ export class RoomSearchComponent implements OnInit {
 
   }
 
-  private setFinalPrice(priceRang: number, room: RoomModule) {
+  public setFinalPrice(priceRang: number, room: RoomModule) {
 
     if (priceRang == 1) {
       this.roomPrice = room.nextMonthPrice;
-      alert("rang 1")
 
     } else if (priceRang == 2) {
       this.roomPrice = room.nextThreeMonthPrice;
-      alert("rang 2")
 
     } else if (priceRang == 3) {
       this.roomPrice = room.nextHalfYearPrice;
-      alert("rang 3")
 
-    } else {
-      alert("greska pri proveri ranga cene")
     }
 
-    this.finalPrice = this.roomPrice;
-    alert("room: " + this.roomPrice)
-    alert("final: " + this.finalPrice)
   }
 
-  changeCheckBox(event: any) {
+  public changeCheckBox(event: any) {
     var checkBoxId = event.currentTarget.id
 
     if (event.target.checked) {
-      alert("cekirano: " + checkBoxId)
       this.numberOfAdditionalServices += 1;
-      alert(this.numberOfAdditionalServices);
 
       if ("transportFromAirport" === checkBoxId) {
         this.additionalSerrvicesPrice += this.transportFromAirportPrice;
@@ -376,9 +336,7 @@ export class RoomSearchComponent implements OnInit {
       }
 
     } else {
-      alert("nije cekirano: " + checkBoxId)
       this.numberOfAdditionalServices -= 1;
-      alert(this.numberOfAdditionalServices);
 
       if ("transportFromAirport" === checkBoxId) {
         this.additionalSerrvicesPrice -= this.transportFromAirportPrice;
@@ -401,11 +359,10 @@ export class RoomSearchComponent implements OnInit {
       }
     }
 
-    //this.finalPrice = this.roomPrice + this.additionalSerrvicesPrice;
-    this.finalPrice = this.roomPrice + this.additionalSerrvicesPrice * (1 - (5 * this.numberOfAdditionalServices) / 100);
+    this.finalPrice = this.additionalSerrvicesPrice * (1 - (5 * this.numberOfAdditionalServices) / 100);
   }
 
-  private resetSearchFields() {
+  public resetSearchFields() {
 
     this.searchForm.get("hotelName").reset();
     this.searchForm.get("hotelLocation").reset();
@@ -413,7 +370,7 @@ export class RoomSearchComponent implements OnInit {
     this.searchForm.get("checkOutDate").setValue(new Date());
   }
 
-  private resetFields() {
+  public resetFields() {
     // form boolean
     this.bookRoomForm.controls['transportFromAirport'].setValue(false);
     this.bookRoomForm.controls['transportToAirport'].setValue(false);

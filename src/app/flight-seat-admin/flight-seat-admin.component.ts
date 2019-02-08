@@ -45,10 +45,6 @@ export class FlightSeatAdminComponent implements OnInit {
 
     public SaveSeats() {
 
-        this.seats.forEach(el => {
-            alert(el.id);
-            
-        });
         this.avioService.saveSeats(this.seats, this.flight.id).subscribe(
 
             data => {

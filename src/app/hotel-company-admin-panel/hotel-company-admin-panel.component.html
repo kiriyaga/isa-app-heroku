@@ -13,9 +13,7 @@
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
               aria-controls="nav-profile" aria-selected="false">Rooms</a>
             <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
-              aria-controls="nav-contact" aria-selected="false">Graphs</a>
-            <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab"
-              aria-controls="nav-about" aria-selected="false">About</a>
+              aria-controls="nav-contact" aria-selected="false">Earnings</a>
           </div>
         </nav>
       </div>
@@ -131,11 +129,11 @@
                 </div>
               </td>
               <td>
-                <button type="button" class="btn btn-outline-danger" style="margin-right: 10px" (click)="DeleteRoom(room, room.id)">Delete</button>
+                <button type="button" class="btn btn-outline-danger" style="margin-right: 10px" (click)="deleteRoom(room, room.id)">Delete</button>
                 <button type="button" class="btn btn-outline-warning" data-toggle="modal" (click)="editRoomModal(room, room.id)"
                   data-target="#editRoomModal">Edit</button>
                 <button type="button" class="btn btn-outline-secondary" *ngIf="room.fastReserve == 1" style="margin-left: 10px"
-                  data-toggle="modal" (click)="fastRoomReservationConfig(room.id)" data-target="#fastRoomReservationConfigModal">FR
+                  data-toggle="modal" (click)="fastRoomReservationConfig(room)" data-target="#fastRoomReservationConfigModal">FR
                   config</button>
               </td>
             </tr>
@@ -149,18 +147,47 @@
         <br>
         <br>
       </div>
-      <!-- GRAPHS -->
+      <!--GRAPHS-->
       <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
         <fusioncharts width="500" height="300" type="column2d" dataFormat="json" [dataSource]="data">
         </fusioncharts>
-      </div>
-      <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
-        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam.
-        Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure
-        adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet
-        duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit
-        sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis
-        occaecat ex.
+        <br>
+        <br>
+        <form class="form" [formGroup]="earningsForm" id="earningsForm">
+          <div class="form-group row">
+            <div class="col-3">
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker222" class="form-control" id="earnings1" formControlName="earnings1"
+                  placeholder="Lower range" [ngClass]="{'is-invalid':earningsForm.get('earnings1').touched && earningsForm.get('earnings1').invalid}"
+                  required>
+                <div *ngIf="earningsForm.get('earnings1').touched && earningsForm.get('earnings1').invalid" class="invalid-feedback">
+                  <div>Lower range is required</div>
+                </div>
+                <mat-datepicker-toggle matSuffix [for]="picker222"></mat-datepicker-toggle>
+                <mat-datepicker #picker222></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-3">
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker88" class="form-control" id="earnings2" formControlName="earnings2"
+                  placeholder="Upper range" [ngClass]="{'is-invalid':earningsForm.get('earnings2').touched && earningsForm.get('earnings2').invalid}"
+                  required>
+                <div *ngIf="earningsForm.get('earnings2').touched && earningsForm.get('earnings2').invalid" class="invalid-feedback">
+                  <div>Upper range is required</div>
+                </div>
+                <mat-datepicker-toggle matSuffix [for]="picker88"></mat-datepicker-toggle>
+                <mat-datepicker #picker88></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-3">
+              <div style="margin-top: 20px">
+                Income: {{earnings}}$
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary" [disabled]="!earningsForm.valid" (click)="GetEarning()">Get
+              earning</button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -185,7 +212,7 @@
               <div class="col-sm-3"></div>
               <h5 for="services" class="col-sm-6 col-form-label" style="text-align: center; font-weight: bolder">Room
                 ID
-                :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{frRoomId}}</h5>
+                :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{frRoom.id}}</h5>
               <div class="col-sm-3"></div>
             </div>
             <div class="form-group row">

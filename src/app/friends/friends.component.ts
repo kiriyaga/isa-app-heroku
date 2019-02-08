@@ -78,7 +78,7 @@ Deny(item:FriendModule){
   }
 
   AddFriend(item:UserModule){
-    alert(item.username);
+  
 
     this.friendsService.SendFriendRequest(item.username).subscribe(
       data => {
@@ -106,7 +106,7 @@ Deny(item:FriendModule){
   }
 
   Search(){
-    alert(this.search.get('input').value);
+    
 
     this.friendsService.SearchUseres(this.search.get('input').value).subscribe(
       data => {

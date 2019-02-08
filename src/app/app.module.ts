@@ -49,6 +49,7 @@ import { HotelCompanyModule } from './hotel-company/hotel-company.module';
 import { FlightSearchComponent } from './flight-search/flight-search.component';
 import { FlightFriendConfirmComponent } from './flight-friend-confirm/flight-friend-confirm.component';
 import { RoomSearchComponent } from './room-search/room-search.component';
+import { SystemAdminOptionsComponent } from './system-admin-options/system-admin-options/system-admin-options.component';
 
 @NgModule({
 
@@ -74,7 +75,8 @@ import { RoomSearchComponent } from './room-search/room-search.component';
     HotelCompanyAdminPanelComponent,
     FlightSearchComponent,
     FlightFriendConfirmComponent,
-    RoomSearchComponent
+    RoomSearchComponent,
+    SystemAdminOptionsComponent
   ],
   imports: [
     FusionChartsModule,

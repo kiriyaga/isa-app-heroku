@@ -11,6 +11,9 @@ export class JwtInterceptor implements HttpInterceptor {
            
             const clonedRequest = request.clone({ headers:request.headers.set('Token-Authority', sessionUser.token) })
             
+            
+            console.warn(clonedRequest.headers.get('Token-Authority'));
+            
             return next.handle(clonedRequest);
            
         }

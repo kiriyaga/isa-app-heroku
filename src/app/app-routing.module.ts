@@ -22,6 +22,8 @@ import { FlightSearchComponent } from './flight-search/flight-search.component';
 import { FlightFriendConfirmComponent } from './flight-friend-confirm/flight-friend-confirm.component';
 import { RoomSearchComponent } from './room-search/room-search.component';
 import { FirstTimeGuardService } from './guards/first-time-guard.service';
+import { SystemAdminOptionsComponent } from './system-admin-options/system-admin-options/system-admin-options.component';
+import { SystemAdminGuardService } from './guards/system-admin-guard.service';
 
 
 const routes: Routes = [
@@ -70,7 +72,11 @@ const routes: Routes = [
   },
   {
     path: 'friends',
-    component: FriendsComponent,canActivate: [FirstTimeGuardService]
+    component: FriendsComponent, canActivate: [FirstTimeGuardService]
+  },
+  {
+    path: 'sysadmin/options',
+    component: SystemAdminOptionsComponent, canActivate: [ SystemAdminGuardService ]
   }
 ];
 
