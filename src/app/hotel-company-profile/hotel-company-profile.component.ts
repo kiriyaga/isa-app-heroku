@@ -131,6 +131,9 @@ export class HotelCompanyProfileComponent implements OnInit {
       }
     )
   }
+  
+  EndDateChange(){
+  }
 
   public makeReservation() {
 
