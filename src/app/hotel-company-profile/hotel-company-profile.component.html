@@ -243,7 +243,7 @@
                             <div class="col-5">
                                 <mat-form-field>
                                     <input matInput [matDatepicker]="picker1" class="form-control" id="checkInDate"
-                                        (change)="EndDateChange($event)" formControlName="checkInDate" placeholder="Check in date"
+                                         formControlName="checkInDate" placeholder="Check in date"
                                         [ngClass]="{'is-invalid':bookRoomForm.get('checkInDate').touched 
                                             && bookRoomForm.get('checkInDate').invalid}"
                                         required>

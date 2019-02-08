@@ -6,7 +6,7 @@ export const environment = {
   production: false,
 
     // API Url
-    apiUrl: 'http://localhost:8080'
+    apiUrl: 'isa-server-team4.herokuapp.com'
 };
 
 /*
