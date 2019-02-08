@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
    // API Url
-    apiUrl: 'https://isa-server-team4.herokuapp.com'
+    apiUrl: 'http://localhost:8080'
 };
